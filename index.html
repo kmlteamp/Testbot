@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NCB TEST — Chat AI</title>
+<title>NCB TEST — Chat AI + Semantic Memory</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -105,6 +105,17 @@
   }
   .msg.bot pre code { background: none; padding: 0; }
 
+  .memory-badge {
+    display: inline-block;
+    font-size: 10.5px;
+    color: var(--muted);
+    background: rgba(79,140,255,.12);
+    border: 1px solid rgba(79,140,255,.25);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+
   .typing { display: flex; gap: 4px; }
   .typing span {
     width: 7px; height: 7px; border-radius: 50%;
@@ -149,60 +160,6 @@
   #send:hover:not(:disabled) { filter: brightness(1.12); }
   #send:active:not(:disabled) { transform: scale(.97); }
   #send:disabled { opacity: .45; cursor: not-allowed; }
-
-  .modal {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.7);
-    display: none; place-items: center;
-    padding: 16px; z-index: 100;
-  }
-  .modal.open { display: grid; }
-  .modal-box {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px;
-    max-width: 440px; width: 100%;
-  }
-  .modal-box h2 { font-size: 16px; margin-bottom: 14px; }
-  .modal-box label {
-    display: block;
-    font-size: 12.5px; color: var(--muted);
-    margin: 12px 0 6px;
-  }
-  .modal-box input, .modal-box select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #2b3348;
-    background: var(--bg);
-    color: var(--text);
-    font-family: inherit; font-size: 14px;
-    outline: none;
-  }
-  .modal-box input:focus, .modal-box select:focus { border-color: var(--accent); }
-  .modal-box .hint {
-    font-size: 11.5px; color: var(--muted);
-    margin-top: 8px; line-height: 1.5;
-  }
-  .modal-box .hint a { color: var(--accent); }
-  .modal-box .actions {
-    margin-top: 18px;
-    display: flex; gap: 10px; justify-content: flex-end;
-  }
-  .modal-box .actions button {
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 13.5px; font-weight: 600;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--panel-2);
-    color: var(--text);
-  }
-  .modal-box .actions button.primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    border: none; color: #fff;
-  }
 </style>
 </head>
 <body>
@@ -211,11 +168,10 @@
     <div class="logo">NCB</div>
     <div class="brand">
       <h1>NCB TEST</h1>
-      <p id="model-label">Pollinations · openai/gpt-5.4-nano</p>
+      <p id="model-label">openai/gpt-5.4-nano · semantic memory</p>
     </div>
     <div class="tools">
-      <button id="btn-settings" title="Cài đặt">⚙</button>
-      <button id="btn-clear" title="Xóa chat">🗑</button>
+      <button id="btn-clear" title="Xóa chat + memory">🗑</button>
     </div>
   </header>
 
@@ -227,84 +183,32 @@
   </footer>
 </div>
 
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h2>Cài đặt</h2>
-    <label>API Key (<code>sk_...</code>)</label>
-    <input id="cfg-key" type="password" placeholder="sk_..." autocomplete="off" />
-    <div class="hint">
-      Lấy <strong>Secret Key</strong> tại
-      <a href="https://enter.pollinations.ai/keys" target="_blank" rel="noopener">
-        enter.pollinations.ai/keys
-      </a>
-      → <em>Create Key</em> (không phải Create App Key).<br>
-      Key chỉ lưu trong <code>localStorage</code> trình duyệt của bạn.
-    </div>
-
-    <label>Model</label>
-    <select id="cfg-model"></select>
-
-    <label>System prompt</label>
-    <input id="cfg-system" type="text" />
-
-    <div class="actions">
-      <button id="btn-cancel">Hủy</button>
-      <button id="btn-save" class="primary">Lưu</button>
-    </div>
-  </div>
-</div>
-
 <script>
 /* =========================================================
-   NCB TEST — Pollinations chat client
-   Endpoint : POST https://gen.pollinations.ai/v1/chat/completions
-   Auth     : Bearer sk_...
+   NCB TEST — Frontend với Semantic Memory (Voyage embeddings)
+   Backend proxy: /api/embed và /api/chat
    ========================================================= */
 
-const ENDPOINT = "https://gen.pollinations.ai/v1/chat/completions";
-
-const MODELS = [
-  { id: "openai/gpt-5.4-nano",          label: "OpenAI GPT-5.4 Nano" },
-  { id: "openai/gpt-4o-mini",           label: "OpenAI GPT-4o Mini" },
-  { id: "openai/gpt-5-nano",            label: "OpenAI GPT-5 Nano" },
-  { id: "anthropic/claude-haiku-4.5",   label: "Claude Haiku 4.5" },
-  { id: "anthropic/claude-sonnet-4.6",  label: "Claude Sonnet 4.6" },
-  { id: "google/gemini-2.5-flash-lite", label: "Gemini 2.5 Flash Lite" },
-  { id: "google/gemini-3.7-flash",      label: "Gemini 3.7 Flash" },
-  { id: "deepseek/deepseek-v4-flash",   label: "DeepSeek V4 Flash" },
-  { id: "qwen/qwen3.7-plus",            label: "Qwen 3.7 Plus" },
-  { id: "meta/llama-3.3-70b-instruct",  label: "Llama 3.3 70B" },
-  { id: "mistralai/mistral-small-3.2",  label: "Mistral Small 3.2" },
-  { id: "x-ai/grok-4.20",               label: "Grok 4.20" },
-];
-
-const DEFAULT_SYSTEM = "Bạn là NCB TEST, trợ lý AI thân thiện, trả lời bằng tiếng Việt, ngắn gọn và chính xác. Dùng markdown khi cần thiết.";
+const MODEL = "openai/gpt-5.4-nano";
+const EMBED_MODEL = "voyage-4-large";
 const MAX_HISTORY = 20;
+const TOP_K_MEMORY = 3;
+const SYSTEM_PROMPT = "Bạn là NCB TEST, trợ lý AI thân thiện, trả lời bằng tiếng Việt, ngắn gọn và chính xác. Bạn có bộ nhớ dài hạn về các cuộc hội thoại trước đó; hãy dùng thông tin liên quan nếu được cung cấp.";
 
+/* ---------- STATE ---------- */
 const state = {
-  apiKey:  localStorage.getItem("ncb.key")    || "",
-  model:   localStorage.getItem("ncb.model")  || MODELS[0].id,
-  system:  localStorage.getItem("ncb.system") || DEFAULT_SYSTEM,
   history: JSON.parse(localStorage.getItem("ncb.history") || "[]"),
+  memory: JSON.parse(localStorage.getItem("ncb.memory") || "[]"), // [{ text, role, embedding }]
   busy: false,
 };
 
-const chatEl     = document.getElementById("chat");
-const inputEl    = document.getElementById("input");
-const sendEl     = document.getElementById("send");
+/* ---------- DOM ---------- */
+const chatEl = document.getElementById("chat");
+const inputEl = document.getElementById("input");
+const sendEl = document.getElementById("send");
 const modelLabel = document.getElementById("model-label");
-const modal      = document.getElementById("modal");
-const cfgKey     = document.getElementById("cfg-key");
-const cfgModel   = document.getElementById("cfg-model");
-const cfgSystem  = document.getElementById("cfg-system");
 
-MODELS.forEach(m => {
-  const o = document.createElement("option");
-  o.value = m.id;
-  o.textContent = m.label + " — " + m.id;
-  cfgModel.appendChild(o);
-});
-
+/* ---------- TIỆN ÍCH ---------- */
 function escapeHtml(s) {
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
@@ -316,26 +220,22 @@ function renderMarkdown(text) {
   html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   return html;
 }
-function updateModelLabel() {
-  modelLabel.textContent = "Pollinations · " + state.model;
-}
 function saveState() {
-  localStorage.setItem("ncb.key", state.apiKey);
-  localStorage.setItem("ncb.model", state.model);
-  localStorage.setItem("ncb.system", state.system);
-  localStorage.setItem("ncb.history", JSON.stringify(state.history.slice(-50)));
+  localStorage.setItem("ncb.history", JSON.stringify(state.history.slice(-100)));
+  localStorage.setItem("ncb.memory", JSON.stringify(state.memory.slice(-200)));
 }
 function scrollBottom() { chatEl.scrollTop = chatEl.scrollHeight; }
 
-function addBubble(role, text, streaming = false) {
+function addBubble(role, text, extra = "") {
   const div = document.createElement("div");
   div.className = "msg " + role;
-  div.innerHTML = streaming ? "" :
-    (role === "bot" ? renderMarkdown(text) : escapeHtml(text));
+  const content = role === "bot" ? renderMarkdown(text) : escapeHtml(text);
+  div.innerHTML = extra + content;
   chatEl.appendChild(div);
   scrollBottom();
   return div;
 }
+
 function showTyping() {
   const d = document.createElement("div");
   d.className = "msg bot typing";
@@ -345,36 +245,73 @@ function showTyping() {
   scrollBottom();
 }
 function hideTyping() { document.getElementById("typing-ind")?.remove(); }
+
 function setBusy(v) {
   state.busy = v;
   sendEl.disabled = v;
   inputEl.disabled = v;
 }
 
-function renderHistory() {
-  chatEl.innerHTML = "";
-  if (state.history.length === 0) {
-    addBubble("bot",
-      "Xin chào 👋 Mình là **NCB TEST**.\n\n" +
-      "• Bấm **⚙** để nhập API key và chọn model.\n" +
-      "• Lấy key tại enter.pollinations.ai/keys."
-    );
-    return;
+/* ---------- EMBEDDING ---------- */
+async function getEmbedding(text, inputType = "document") {
+  const res = await fetch("/api/embed", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input: text, model: EMBED_MODEL, input_type: inputType }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error("Embedding thất bại: " + err);
   }
-  state.history.forEach(m => addBubble(m.role === "user" ? "user" : "bot", m.content));
+  const data = await res.json();
+  // MongoDB/Voyage trả về { data: [{ embedding: [...] }, ...] }
+  const vec = data?.data?.[0]?.embedding;
+  if (!vec || !Array.isArray(vec)) throw new Error("Không nhận được vector embedding");
+  return vec;
 }
 
+/* ---------- SIMILARITY ---------- */
+function cosineSimilarity(a, b) {
+  if (a.length !== b.length) return 0;
+  let dot = 0, magA = 0, magB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    magA += a[i] * a[i];
+    magB += b[i] * b[i];
+  }
+  const denom = Math.sqrt(magA) * Math.sqrt(magB);
+  return denom === 0 ? 0 : dot / denom;
+}
+
+/* ---------- RETRIEVE MEMORY ---------- */
+async function retrieveRelevantMemory(queryText, topK = TOP_K_MEMORY) {
+  if (state.memory.length === 0) return [];
+  const qVec = await getEmbedding(queryText, "query");
+
+  const scored = state.memory
+    .map((m) => ({ ...m, score: cosineSimilarity(qVec, m.embedding) }))
+    .filter((m) => m.score > 0.35) // ngưỡng tương đồng tối thiểu
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK);
+
+  return scored;
+}
+
+/* ---------- LƯU MEMORY ---------- */
+async function storeMemory(text, role) {
+  try {
+    const vec = await getEmbedding(text, "document");
+    state.memory.push({ text, role, embedding: vec, ts: Date.now() });
+    saveState();
+  } catch (e) {
+    console.warn("Không lưu được memory:", e.message);
+  }
+}
+
+/* ---------- GỬI TIN NHẮN ---------- */
 async function send() {
   const text = inputEl.value.trim();
   if (!text || state.busy) return;
-
-  if (!state.apiKey || !state.apiKey.startsWith("sk_")) {
-    addBubble("bot",
-      "⚠️ Chưa có API key hợp lệ.\n" +
-      "Bấm **⚙** để nhập **Secret Key** (`sk_...`) — lưu ý **không** dùng App Key (`pk_...`)."
-    );
-    return;
-  }
 
   inputEl.value = "";
   inputEl.style.height = "auto";
@@ -386,7 +323,83 @@ async function send() {
   showTyping();
 
   try {
-    await streamReply();
+    // 1. Truy xuất memory liên quan
+    let memoryContext = "";
+    try {
+      const relevant = await retrieveRelevantMemory(text);
+      if (relevant.length > 0) {
+        memoryContext =
+          "\n\n[NGỮ CẢNH TỪ BỘ NHỚ]\n" +
+          relevant
+            .map((m) => `- ${m.role === "user" ? "Người dùng" : "Trợ lý"}: ${m.text}`)
+            .join("\n");
+      }
+    } catch (e) {
+      console.warn("Retrieve memory lỗi:", e.message);
+    }
+
+    // 2. Gọi chat với streaming
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT + memoryContext },
+      ...state.history.slice(-MAX_HISTORY).map((m) => ({
+        role: m.role === "user" ? "user" : "assistant",
+        content: m.content,
+      })),
+    ];
+
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: MODEL, messages, stream: true, temperature: 0.7 }),
+    });
+
+    if (!res.ok) {
+      let msg = `HTTP ${res.status}`;
+      try { const j = await res.json(); msg = j?.error?.message || msg; } catch {}
+      throw new Error(msg);
+    }
+
+    hideTyping();
+    const botEl = addBubble("bot", "", `<div class="memory-badge">🧠 Đã dùng ${memoryContext ? "bộ nhớ" : "ngữ cảnh trực tiếp"}</div>`);
+    let acc = "";
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      let idx;
+      while ((idx = buffer.indexOf("\n\n")) !== -1) {
+        const chunk = buffer.slice(0, idx);
+        buffer = buffer.slice(idx + 2);
+        for (const line of chunk.split("\n")) {
+          if (!line.startsWith("data:")) continue;
+          const data = line.slice(5).trim();
+          if (!data || data === "[DONE]") continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json?.choices?.[0]?.delta?.content;
+            if (delta) {
+              acc += delta;
+              botEl.innerHTML = `<div class="memory-badge">🧠 ${memoryContext ? "Đã dùng bộ nhớ" : "Ngữ cảnh trực tiếp"}</div>` + renderMarkdown(acc);
+              scrollBottom();
+            }
+          } catch (_) {}
+        }
+      }
+    }
+
+    const finalReply = acc || "(không có phản hồi)";
+    state.history.push({ role: "assistant", content: finalReply });
+    saveState();
+
+    // 3. Lưu cả câu hỏi và câu trả lời vào memory
+    await storeMemory(text, "user");
+    await storeMemory(finalReply, "assistant");
   } catch (err) {
     hideTyping();
     addBubble("bot", "❌ Lỗi: " + err.message);
@@ -396,83 +409,21 @@ async function send() {
   }
 }
 
-async function streamReply() {
-  const messages = [
-    { role: "system", content: state.system },
-    ...state.history.slice(-MAX_HISTORY).map(m => ({
-      role: m.role === "user" ? "user" : "assistant",
-      content: m.content,
-    })),
-  ];
-
-  const res = await fetch(ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + state.apiKey,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: state.model,
-      messages,
-      stream: true,
-      temperature: 0.7,
-    }),
-  });
-
-  if (!res.ok) {
-    let msg = `HTTP ${res.status}`;
-    try {
-      const j = await res.json();
-      msg = j?.error?.message || msg;
-    } catch {}
-    if (res.status === 401) msg += " — kiểm tra key (phải là sk_..., không phải pk_...)";
-    if (res.status === 402) msg += " — hết budget, nạp credit hoặc dùng model free";
-    throw new Error(msg);
+/* ---------- RENDER HISTORY ---------- */
+function renderHistory() {
+  chatEl.innerHTML = "";
+  if (state.history.length === 0) {
+    addBubble("bot",
+      "Xin chào 👋 Mình là **NCB TEST**, có **bộ nhớ ngữ nghĩa** dùng MongoDB AI.\n\n" +
+      "• Hãy chat bình thường — mình sẽ tự nhớ các ý chính.\n" +
+      "• Khi bạn hỏi lại chủ đề cũ, mình sẽ truy xuất ký ức liên quan."
+    );
+    return;
   }
-
-  hideTyping();
-  const botEl = addBubble("bot", "", true);
-  let acc = "";
-
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
-
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-
-    let idx;
-    while ((idx = buffer.indexOf("\n\n")) !== -1) {
-      const chunk = buffer.slice(0, idx);
-      buffer = buffer.slice(idx + 2);
-      for (const line of chunk.split("\n")) {
-        if (!line.startsWith("data:")) continue;
-        const data = line.slice(5).trim();
-        if (!data || data === "[DONE]") continue;
-        try {
-          const json = JSON.parse(data);
-          const delta = json?.choices?.[0]?.delta?.content;
-          if (delta) {
-            acc += delta;
-            botEl.innerHTML = renderMarkdown(acc);
-            scrollBottom();
-          }
-        } catch (_) {}
-      }
-    }
-  }
-
-  if (!acc) {
-    botEl.innerHTML = "_(không có phản hồi)_";
-    state.history.push({ role: "assistant", content: "(không có phản hồi)" });
-  } else {
-    state.history.push({ role: "assistant", content: acc });
-  }
-  saveState();
+  state.history.forEach((m) => addBubble(m.role === "user" ? "user" : "bot", m.content));
 }
 
+/* ---------- SỰ KIỆN ---------- */
 sendEl.addEventListener("click", send);
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
@@ -483,39 +434,23 @@ inputEl.addEventListener("input", () => {
 });
 
 document.getElementById("btn-clear").addEventListener("click", () => {
-  if (!confirm("Xóa toàn bộ lịch sử chat?")) return;
+  if (!confirm("Xóa toàn bộ lịch sử chat và bộ nhớ?")) return;
   state.history = [];
+  state.memory = [];
   saveState();
   renderHistory();
 });
-document.getElementById("btn-settings").addEventListener("click", () => {
-  cfgKey.value    = state.apiKey;
-  cfgModel.value  = state.model;
-  cfgSystem.value = state.system;
-  modal.classList.add("open");
-});
-document.getElementById("btn-cancel").addEventListener("click", () => {
-  modal.classList.remove("open");
-});
-document.getElementById("btn-save").addEventListener("click", () => {
-  state.apiKey = cfgKey.value.trim();
-  state.model  = cfgModel.value;
-  state.system = cfgSystem.value.trim() || DEFAULT_SYSTEM;
-  saveState();
-  updateModelLabel();
-  modal.classList.remove("open");
-});
 
-updateModelLabel();
+/* ---------- KHỞI ĐỘNG ---------- */
+modelLabel.textContent = MODEL + " · " + EMBED_MODEL;
 renderHistory();
-if (!state.apiKey) {
-  setTimeout(() => {
-    cfgKey.value    = state.apiKey;
-    cfgModel.value  = state.model;
-    cfgSystem.value = state.system;
-    modal.classList.add("open");
-  }, 400);
-}
+
+// Kiểm tra backend
+fetch("/api/health").then(r => r.json()).then(h => {
+  if (!h.mongodb) console.warn("MongoDB AI key chưa cấu hình — memory sẽ không hoạt động.");
+  if (!h.pollinations) console.warn("Pollinations key chưa cấu hình — chat sẽ không hoạt động.");
+}).catch(() => {});
+
 inputEl.focus();
 </script>
 </body>
