@@ -1,327 +1,349 @@
-ơ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NCB TEST — Chat AI</title>
+<title>NCB TEST — Đăng nhập Pollinations</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0f1117;
-    --panel: #171a23;
-    --panel-2: #1f2330;
-    --accent: #4f8cff;
-    --accent-2: #7c5cff;
-    --text: #e6e9f0;
-    --muted: #8b93a7;
-    --user: #2a3550;
-    --bot: #1f2330;
-  }
   body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: radial-gradient(1200px 600px at 50% -10%, #1b2340, var(--bg));
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 16px;
+    background: radial-gradient(1200px 600px at 50% -10%, #1a2244, #0b0f1a);
+    color: #e8ecf4; min-height: 100vh;
+    display: grid; place-items: center; padding: 20px;
   }
-  .app {
-    width: 100%;
-    max-width: 880px;
-    height: calc(100vh - 32px);
-    display: flex;
-    flex-direction: column;
-    background: var(--panel);
-    border: 1px solid #262b3a;
-    border-radius: 18px;
-    overflow: hidden;
+  .card {
+    background: #131824; border: 1px solid #232a3d;
+    border-radius: 18px; padding: 32px;
+    max-width: 460px; width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,.5);
   }
-  header {
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid #262b3a;
-    background: linear-gradient(90deg, rgba(79,140,255,.12), rgba(124,92,255,.12));
-  }
+  h1 { font-size: 20px; margin-bottom: 8px; }
+  p.sub { color: #8892a8; font-size: 13px; margin-bottom: 22px; line-height: 1.5; }
   .logo {
-    width: 38px; height: 38px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, #4f8cff, #a855f7);
     display: grid; place-items: center;
-    font-weight: 800; font-size: 14px; color: #fff;
+    font-weight: 800; font-size: 14px; color: #fff; margin-bottom: 18px;
   }
-  header h1 { font-size: 17px; font-weight: 700; letter-spacing: .3px; }
-  header p { font-size: 12px; color: var(--muted); }
-  #chat {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    scroll-behavior: smooth;
-  }
-  .msg {
-    max-width: 82%;
-    padding: 12px 15px;
-    border-radius: 14px;
-    line-height: 1.55;
-    font-size: 14.5px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    animation: pop .18s ease-out;
-  }
-  @keyframes pop { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
-  .msg.user {
-    align-self: flex-end;
-    background: var(--user);
-    border: 1px solid #37466b;
-    border-bottom-right-radius: 4px;
-  }
-  .msg.bot {
-    align-self: flex-start;
-    background: var(--bot);
-    border: 1px solid #2b3142;
-    border-bottom-left-radius: 4px;
-  }
-  .msg.bot code {
-    background: #0e1118; padding: 2px 6px; border-radius: 5px;
-    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
-  }
-  .msg.bot pre {
-    background: #0e1118; padding: 12px; border-radius: 10px;
-    overflow-x: auto; margin: 8px 0; border: 1px solid #262b3a;
-  }
-  .msg.bot pre code { background: none; padding: 0; }
-  .typing { display: flex; gap: 4px; padding: 14px 16px; }
-  .typing span {
-    width: 7px; height: 7px; border-radius: 50%; background: var(--muted);
-    animation: blink 1.2s infinite;
-  }
-  .typing span:nth-child(2){ animation-delay: .2s; }
-  .typing span:nth-child(3){ animation-delay: .4s; }
-  @keyframes blink { 0%,60%,100%{opacity:.25;} 30%{opacity:1;} }
-  footer {
-    padding: 14px 16px;
-    border-top: 1px solid #262b3a;
-    display: flex;
-    gap: 10px;
-    background: var(--panel-2);
-  }
-  #input {
-    flex: 1;
-    resize: none;
-    max-height: 140px;
-    min-height: 46px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #2f3648;
-    background: #0f1117;
-    color: var(--text);
-    font-family: inherit;
-    font-size: 14.5px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  #input:focus { border-color: var(--accent); }
-  #send {
-    padding: 0 20px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
+  button {
+    width: 100%; padding: 13px;
+    border: none; border-radius: 11px;
+    background: linear-gradient(135deg, #4f8cff, #a855f7);
+    color: #fff; font-weight: 700; font-size: 14.5px;
+    cursor: pointer; margin-bottom: 10px;
     transition: filter .15s, transform .1s;
   }
-  #send:hover:not(:disabled) { filter: brightness(1.12); }
-  #send:active:not(:disabled) { transform: scale(.97); }
-  #send:disabled { opacity: .45; cursor: not-allowed; }
-  #chat::-webkit-scrollbar { width: 8px; }
-  #chat::-webkit-scrollbar-thumb { background: #2c3244; border-radius: 8px; }
+  button:hover:not(:disabled) { filter: brightness(1.12); }
+  button:active:not(:disabled) { transform: scale(.98); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.ghost {
+    background: #1a2033; border: 1px solid #232a3d;
+    font-weight: 600; font-size: 13.5px;
+  }
+  .box {
+    background: #0b0f1a; border: 1px solid #232a3d;
+    border-radius: 11px; padding: 14px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12.5px; line-height: 1.55;
+    white-space: pre-wrap; word-break: break-all;
+    margin-top: 14px; min-height: 44px;
+    color: #8892a8;
+  }
+  .box.ok   { border-color: #2e7d32; color: #a5e8a8; }
+  .box.err  { border-color: #c62828; color: #ffb4b4; }
+  .box code { color: #a5d6ff; }
+  .code-big {
+    font-size: 28px; letter-spacing: 6px;
+    text-align: center; padding: 18px 0;
+    font-weight: 800; color: #fff;
+  }
+  .row { display: flex; gap: 10px; }
+  .row button { flex: 1; }
+  a { color: #4f8cff; }
 </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="logo">NCB</div>
-    <div>
-      <h1>NCB TEST</h1>
-      <p>Trợ lý AI · OpenRouter</p>
-    </div>
-  </header>
+<div class="card">
+  <div class="logo">NCB</div>
+  <h1>NCB TEST — Đăng nhập</h1>
+  <p class="sub">
+    Đăng nhập qua <strong>Pollinations Pay (BYOP)</strong> để nhận
+    token <code>sk_</code> tạm thời có budget giới hạn.
+  </p>
 
-  <main id="chat"></main>
+  <button id="btn-login">Đăng nhập với Pollinations</button>
+  <div class="row">
+    <button id="btn-device" class="ghost">Device Flow (không cần redirect)</button>
+    <button id="btn-logout" class="ghost">Đăng xuất</button>
+  </div>
 
-  <footer>
-    <textarea id="input" rows="1" placeholder="Nhập tin nhắn… (Enter để gửi, Shift+Enter xuống dòng)"></textarea>
-    <button id="send">Gửi</button>
-  </footer>
+  <div class="box" id="status">Chưa đăng nhập.</div>
 </div>
 
 <script>
-/* =========================================================
+/* =====================================================================
    CẤU HÌNH
-   ---------------------------------------------------------
-   ⚠️ CẢNH BÁO: Key đặt ở đây sẽ LỘ với mọi người truy cập
-   trang web. Chỉ dùng khi chạy LOCAL / TEST nội bộ.
-   Khi deploy công khai → bắt buộc dùng backend proxy.
-   ========================================================= */
-const CONFIG = {
-  API_KEY: "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", // <-- thay bằng key CỦA BẠN (đừng commit lên Git)
-  MODEL: "openai/gpt-4o-mini",                // đổi model tùy ý, vd: "meta-llama/llama-3.1-8b-instruct:free"
-  ENDPOINT: "https://openrouter.ai/api/v1/chat/completions",
-  SYSTEM_PROMPT: "Bạn là NCB TEST, trợ lý AI thân thiện, trả lời bằng tiếng Việt, ngắn gọn và chính xác.",
-  MAX_HISTORY: 20 // số tin nhắn gần nhất gửi kèm để giữ ngữ cảnh
-};
+   ===================================================================== */
+const APP_KEY = "pk_QreHuFoUJaVVZvua";          // App Key (publishable)
+const REDIRECT_URI = location.origin + location.pathname; // phải khớp khai báo App
+const SCOPES = "text";                          // quyền model: "text", "image,text", ...
+                                                // hoặc model ID cụ thể
+const BUDGET_USD = 5;                           // hạn mức cho mỗi consent (USD)
+const EXPIRY_DAYS = 7;                          // key sống bao nhiêu ngày
 
-/* ---------------- DOM ---------------- */
-const chatEl  = document.getElementById("chat");
-const inputEl = document.getElementById("input");
-const sendEl  = document.getElementById("send");
+/* Endpoint OAuth — XÁC MINH LẠI từ BRING_YOUR_OWN_POLLEN.md */
+const AUTH_URL   = "https://enter.pollinations.ai/oauth/authorize";
+const TOKEN_URL  = "https://enter.pollinations.ai/oauth/token";
+const DEVICE_URL = "https://enter.pollinations.ai/oauth/device_authorization";
 
-/* ---------------- STATE ---------------- */
-/** @type {{role:"user"|"assistant", content:string}[]} */
-let history = [];
-let sending = false;
+/* Storage key */
+const LS_TOKEN   = "ncb.oauth.token";
+const LS_EXPIRES = "ncb.oauth.expires";
+const LS_VERIFIER = "ncb.oauth.verifier";
 
-/* ---------------- HELPERS ---------------- */
-function escapeHtml(s) {
-  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+/* =====================================================================
+   TIỆN ÍCH PKCE
+   ===================================================================== */
+function b64url(bytes) {
+  let s = btoa(String.fromCharCode(...bytes));
+  return s.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function randomString(len = 64) {
+  const b = new Uint8Array(len);
+  crypto.getRandomValues(b);
+  return b64url(b).slice(0, len);
+}
+async function sha256Challenge(verifier) {
+  const buf = await crypto.subtle.digest("SHA-256",
+    new TextEncoder().encode(verifier));
+  return b64url(new Uint8Array(buf));
 }
 
-/** Render markdown tối giản: code block, inline code, in đậm, xuống dòng */
-function renderMarkdown(text) {
-  let html = escapeHtml(text);
-
-  // code block ```lang ... ```
-  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) =>
-    `<pre><code>${code.replace(/\n$/,"")}</code></pre>`
-  );
-  // inline code
-  html = html.replace(/`([^`\n]+)`/g, "<code>$1</code>");
-  // bold
-  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  return html;
+/* =====================================================================
+   UI HELPERS
+   ===================================================================== */
+const statusEl = document.getElementById("status");
+function setStatus(text, cls = "") {
+  statusEl.className = "box " + cls;
+  statusEl.textContent = text;
 }
 
-function addMessage(role, text) {
-  const div = document.createElement("div");
-  div.className = `msg ${role}`;
-  div.innerHTML = role === "bot" ? renderMarkdown(text) : escapeHtml(text);
-  chatEl.appendChild(div);
-  chatEl.scrollTop = chatEl.scrollHeight;
-  return div;
+/* =====================================================================
+   TOKEN STORAGE
+   ===================================================================== */
+function saveToken(token, expiresAtMs) {
+  sessionStorage.setItem(LS_TOKEN, token);
+  sessionStorage.setItem(LS_EXPIRES, String(expiresAtMs));
+}
+function loadToken() {
+  const t = sessionStorage.getItem(LS_TOKEN);
+  const exp = Number(sessionStorage.getItem(LS_EXPIRES) || 0);
+  if (!t) return null;
+  if (exp && Date.now() > exp) { logout(); return null; }
+  return t;
+}
+function logout() {
+  sessionStorage.removeItem(LS_TOKEN);
+  sessionStorage.removeItem(LS_EXPIRES);
+  sessionStorage.removeItem(LS_VERIFIER);
+  setStatus("Đã đăng xuất.");
+  showLoggedOut();
+}
+function showLoggedIn(token) {
+  const masked = token.slice(0, 10) + "…" + token.slice(-4);
+  setStatus("✅ Đã đăng nhập.\nToken: " + masked, "ok");
+  document.getElementById("btn-login").disabled = true;
+  document.getElementById("btn-device").disabled = true;
+}
+function showLoggedOut() {
+  document.getElementById("btn-login").disabled = false;
+  document.getElementById("btn-device").disabled = false;
 }
 
-function showTyping() {
-  const div = document.createElement("div");
-  div.className = "msg bot typing";
-  div.innerHTML = "<span></span><span></span><span></span>";
-  div.id = "typing-indicator";
-  chatEl.appendChild(div);
-  chatEl.scrollTop = chatEl.scrollHeight;
-}
-function hideTyping() {
-  document.getElementById("typing-indicator")?.remove();
-}
+/* =====================================================================
+   FLOW 1 — AUTH CODE + PKCE
+   ===================================================================== */
+async function startAuthCodeFlow() {
+  const verifier = randomString(64);
+  sessionStorage.setItem(LS_VERIFIER, verifier);
+  const challenge = await sha256Challenge(verifier);
+  const st = randomString(24);
+  sessionStorage.setItem("ncb.oauth.state", st);
 
-function setSending(v) {
-  sending = v;
-  sendEl.disabled = v;
-  inputEl.disabled = v;
-}
-
-/* ---------------- API CALL ---------------- */
-async function callAI(userText) {
-  // Ghép lịch sử (giới hạn) + tin nhắn mới
-  history.push({ role: "user", content: userText });
-  const trimmed = history.slice(-CONFIG.MAX_HISTORY);
-
-  const payload = {
-    model: CONFIG.MODEL,
-    messages: [
-      { role: "system", content: CONFIG.SYSTEM_PROMPT },
-      ...trimmed
-    ],
-    temperature: 0.7
-  };
-
-  const res = await fetch(CONFIG.ENDPOINT, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${CONFIG.API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": location.origin,   // OpenRouter yêu cầu để xếp hạng
-      "X-Title": "NCB TEST"
-    },
-    body: JSON.stringify(payload)
+  const params = new URLSearchParams({
+    client_id: APP_KEY,
+    redirect_uri: REDIRECT_URI,
+    response_type: "code",
+    scope: SCOPES,
+    state: st,
+    code_challenge: challenge,
+    code_challenge_method: "S256",
+    budget: String(BUDGET_USD),
+    expiry_days: String(EXPIRY_DAYS),
   });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`HTTP ${res.status}: ${errText}`);
-  }
-
-  const data = await res.json();
-  const reply = data?.choices?.[0]?.message?.content?.trim() || "(Không có phản hồi)";
-  history.push({ role: "assistant", content: reply });
-  return reply;
+  location.href = AUTH_URL + "?" + params.toString();
 }
 
-/* ---------------- HANDLERS ---------------- */
-async function handleSend() {
-  const text = inputEl.value.trim();
-  if (!text || sending) return;
+async function handleAuthCallback() {
+  const q = new URLSearchParams(location.search);
+  const code = q.get("code");
+  const err  = q.get("error");
+  const st   = q.get("state");
 
-  if (!CONFIG.API_KEY || CONFIG.API_KEY.startsWith("DÁN_")) {
-    addMessage("bot", "⚠️ Chưa cấu hình API_KEY trong CONFIG. Mở file và dán key OpenRouter của bạn.");
+  if (err) {
+    setStatus("❌ OAuth lỗi: " + err + "\n" + (q.get("error_description") || ""), "err");
+    history.replaceState(null, "", location.pathname);
     return;
   }
+  if (!code) return; // không phải callback
 
-  inputEl.value = "";
-  inputEl.style.height = "auto";
-  addMessage("user", text);
+  history.replaceState(null, "", location.pathname); // xóa ?code khỏi URL
 
-  setSending(true);
-  showTyping();
+  const verifier = sessionStorage.getItem(LS_VERIFIER);
+  const savedState = sessionStorage.getItem("ncb.oauth.state");
+  if (!verifier) { setStatus("❌ Thiếu code_verifier — bắt đầu lại.", "err"); return; }
+  if (st !== savedState) { setStatus("❌ state không khớp — có thể bị CSRF.", "err"); return; }
 
+  setStatus("Đang đổi code → token…");
   try {
-    const reply = await callAI(text);
-    hideTyping();
-    addMessage("bot", reply);
-  } catch (err) {
-    hideTyping();
-    addMessage("bot", `❌ Lỗi: ${err.message}`);
-  } finally {
-    setSending(false);
-    inputEl.focus();
+    const res = await fetch(TOKEN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: APP_KEY,
+        code,
+        redirect_uri: REDIRECT_URI,
+        code_verifier: verifier,
+      }),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status + ": " + await res.text());
+    const data = await res.json();
+
+    const token = data.access_token;
+    const expiresIn = data.expires_in || (EXPIRY_DAYS * 86400);
+    if (!token || !token.startsWith("sk_"))
+      throw new Error("Server không trả về access_token sk_…");
+
+    saveToken(token, Date.now() + expiresIn * 1000);
+    sessionStorage.removeItem(LS_VERIFIER);
+    sessionStorage.removeItem("ncb.oauth.state");
+
+    showLoggedIn(token);
+  } catch (e) {
+    setStatus("❌ Đổi token thất bại: " + e.message, "err");
   }
 }
 
-sendEl.addEventListener("click", handleSend);
+/* =====================================================================
+   FLOW 2 — DEVICE FLOW
+   ===================================================================== */
+async function startDeviceFlow() {
+  setStatus("Đang yêu cầu device code…");
+  try {
+    const res = await fetch(DEVICE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: APP_KEY,
+        scope: SCOPES,
+      }),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status + ": " + await res.text());
+    const dev = await res.json();
 
-inputEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    handleSend();
+    const { device_code, user_code, verification_uri, verification_uri_complete,
+            interval = 5, expires_in = 300 } = dev;
+
+    setStatus(
+      `Mở: ${verification_uri || verification_uri_complete}\n` +
+      `Nhập mã: ${user_code}\n\n` +
+      `Đang chờ bạn xác nhận…`
+    );
+    // hiển thị mã to cho dễ nhìn
+    const big = document.createElement("div");
+    big.className = "code-big";
+    big.textContent = user_code;
+    statusEl.appendChild(big);
+
+    const deadline = Date.now() + expires_in * 1000;
+    while (Date.now() < deadline) {
+      await new Promise(r => setTimeout(r, interval * 1000));
+      const tr = await fetch(TOKEN_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          grant_type: "urn:ietf:params:oauth:grant-type:device_code",
+          client_id: APP_KEY,
+          device_code,
+        }),
+      });
+      const td = await tr.json();
+      if (tr.ok && td.access_token) {
+        const expiresIn = td.expires_in || EXPIRY_DAYS * 86400;
+        saveToken(td.access_token, Date.now() + expiresIn * 1000);
+        showLoggedIn(td.access_token);
+        return;
+      }
+      if (td.error === "authorization_pending") continue;
+      if (td.error === "slow_down") { interval += 2; continue; }
+      if (td.error === "access_denied") throw new Error("Bạn đã từ chối.");
+      if (td.error === "expired_token") throw new Error("Mã đã hết hạn.");
+      throw new Error(td.error_description || td.error || "Lỗi device flow");
+    }
+    throw new Error("Hết thời gian chờ xác nhận.");
+  } catch (e) {
+    setStatus("❌ Device flow lỗi: " + e.message, "err");
   }
-});
+}
 
-// Auto-resize textarea
-inputEl.addEventListener("input", () => {
-  inputEl.style.height = "auto";
-  inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + "px";
-});
+/* =====================================================================
+   TEST GỌI API BẰNG TOKEN sk_
+   ===================================================================== */
+async function testCall() {
+  const token = loadToken();
+  if (!token) return;
+  const box = document.createElement("div");
+  box.className = "box";
+  box.textContent = "Đang test gọi API…";
+  statusEl.appendChild(box);
 
-/* ---------------- WELCOME ---------------- */
-addMessage("bot",
-  "Xin chào 👋 Mình là **NCB TEST**.\nHãy nhập câu hỏi bên dưới để bắt đầu."
-);
-inputEl.focus();
+  try {
+    const r = await fetch("https://gen.pollinations.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-5.4-nano",
+        messages: [{ role: "user", content: "Chào, trả lời 1 câu." }],
+      }),
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error("HTTP " + r.status + ": " + JSON.stringify(j));
+    box.className = "box ok";
+    box.textContent = "✅ API OK:\n" + j.choices[0].message.content;
+  } catch (e) {
+    box.className = "box err";
+    box.textContent = "❌ " + e.message;
+  }
+}
+
+/* =====================================================================
+   WIRE UP
+   ===================================================================== */
+document.getElementById("btn-login").addEventListener("click", startAuthCodeFlow);
+document.getElementById("btn-device").addEventListener("click", startDeviceFlow);
+document.getElementById("btn-logout").addEventListener("click", logout);
+
+(async function boot() {
+  await handleAuthCallback();        // xử lý callback nếu URL có ?code=
+  const t = loadToken();
+  if (t) { showLoggedIn(t); testCall(); }
+  else { showLoggedOut(); setStatus("Chưa đăng nhập."); }
+})();
 </script>
 </body>
 </html>
