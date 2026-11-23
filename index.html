@@ -7,159 +7,139 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #0b0f1a;
-    --panel: #131824;
-    --panel-2: #1a2033;
-    --accent: #4f8cff;
-    --accent-2: #a855f7;
-    --text: #e8ecf4;
-    --muted: #8892a8;
-    --user: #1e2a48;
-    --bot: #161c2b;
-    --border: #232a3d;
+    --bg:#0b0f1a; --panel:#131824; --panel-2:#1a2033;
+    --accent:#4f8cff; --accent-2:#a855f7;
+    --text:#e8ecf4; --muted:#8892a8;
+    --user:#1e2a48; --bot:#161c2b; --border:#232a3d;
+    --ok:#2e7d32; --err:#c62828;
   }
-  html, body { height: 100%; }
-  body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: radial-gradient(1200px 600px at 50% -10%, #1a2244, var(--bg));
-    color: var(--text);
-    display: flex; justify-content: center;
-    padding: 12px; height: 100vh; overflow: hidden;
+  html,body{height:100%}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1200px 600px at 50% -10%,#1a2244,var(--bg));
+    color:var(--text); display:flex; justify-content:center;
+    padding:12px; height:100vh; overflow:hidden;
   }
-  .app {
-    width: 100%; max-width: 900px; height: 100%;
-    display: flex; flex-direction: column;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,.5);
-  }
-  header {
-    padding: 14px 18px;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(90deg, rgba(79,140,255,.10), rgba(168,85,247,.10));
-  }
-  .logo {
-    width: 38px; height: 38px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: grid; place-items: center;
-    font-weight: 800; font-size: 13px; color: #fff; flex-shrink: 0;
-  }
-  .brand { flex: 1; min-width: 0; }
-  .brand h1 { font-size: 16px; font-weight: 700; }
-  .brand p { font-size: 11.5px; color: var(--muted); }
-  .tools { display: flex; gap: 8px; }
-  .tools button {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 11px;
-    border-radius: 9px;
-    font-size: 12.5px;
-    cursor: pointer;
-    transition: background .15s;
-  }
-  .tools button:hover { background: #252c42; }
+  .app{width:100%;max-width:960px;height:100%;display:flex;flex-direction:column;
+    background:var(--panel);border:1px solid var(--border);border-radius:18px;
+    overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  header{padding:12px 16px;display:flex;align-items:center;gap:12px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(90deg,rgba(79,140,255,.10),rgba(168,85,247,.10))}
+  .logo{width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+  .brand{flex:1;min-width:0}
+  .brand h1{font-size:15px;font-weight:700}
+  .brand p{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tabs{display:flex;gap:4px;background:var(--bg);padding:3px;border-radius:10px;
+    border:1px solid var(--border)}
+  .tabs button{background:none;border:none;color:var(--muted);padding:7px 13px;
+    border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s}
+  .tabs button.active{background:var(--panel-2);color:var(--text)}
+  .tools{display:flex;gap:6px}
+  .tools button{background:var(--panel-2);border:1px solid var(--border);color:var(--text);
+    padding:7px 10px;border-radius:9px;font-size:12.5px;cursor:pointer;transition:background .15s}
+  .tools button:hover{background:#252c42}
 
-  #chat {
-    flex: 1; overflow-y: auto; padding: 18px;
-    display: flex; flex-direction: column; gap: 12px;
-    scroll-behavior: smooth;
-  }
-  #chat::-webkit-scrollbar { width: 8px; }
-  #chat::-webkit-scrollbar-thumb { background: #2a3248; border-radius: 8px; }
+  .view{flex:1;display:none;flex-direction:column;overflow:hidden}
+  .view.active{display:flex}
 
-  .msg {
-    max-width: 85%;
-    padding: 11px 14px;
-    border-radius: 14px;
-    line-height: 1.55;
-    font-size: 14.5px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    animation: fade .18s ease-out;
-  }
-  @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-  .msg.user {
-    align-self: flex-end;
-    background: var(--user);
-    border: 1px solid #2e3d66;
-    border-bottom-right-radius: 4px;
-  }
-  .msg.bot {
-    align-self: flex-start;
-    background: var(--bot);
-    border: 1px solid var(--border);
-    border-bottom-left-radius: 4px;
-  }
-  .msg.bot code {
-    background: #0a0e16; padding: 2px 6px; border-radius: 5px;
-    font-family: ui-monospace, Menlo, monospace; font-size: 13px;
-    color: #a5d6ff;
-  }
-  .msg.bot pre {
-    background: #0a0e16; padding: 12px; border-radius: 9px;
-    overflow-x: auto; margin: 8px 0; border: 1px solid var(--border);
-  }
-  .msg.bot pre code { background: none; padding: 0; }
+  /* CHAT */
+  #chat{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;
+    gap:12px;scroll-behavior:smooth}
+  #chat::-webkit-scrollbar{width:8px}
+  #chat::-webkit-scrollbar-thumb{background:#2a3248;border-radius:8px}
+  .msg{max-width:85%;padding:11px 14px;border-radius:14px;line-height:1.55;
+    font-size:14.5px;white-space:pre-wrap;word-wrap:break-word;
+    animation:fade .18s ease-out}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .msg.user{align-self:flex-end;background:var(--user);border:1px solid #2e3d66;
+    border-bottom-right-radius:4px}
+  .msg.bot{align-self:flex-start;background:var(--bot);border:1px solid var(--border);
+    border-bottom-left-radius:4px}
+  .msg.bot code{background:#0a0e16;padding:2px 6px;border-radius:5px;
+    font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#a5d6ff}
+  .msg.bot pre{background:#0a0e16;padding:12px;border-radius:9px;overflow-x:auto;
+    margin:8px 0;border:1px solid var(--border)}
+  .msg.bot pre code{background:none;padding:0}
+  .memory-badge{display:inline-block;font-size:10.5px;color:var(--muted);
+    background:rgba(79,140,255,.12);border:1px solid rgba(79,140,255,.25);
+    padding:2px 8px;border-radius:6px;margin-bottom:6px}
+  .typing{display:flex;gap:4px}
+  .typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);
+    animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s}
+  .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
-  .memory-badge {
-    display: inline-block;
-    font-size: 10.5px;
-    color: var(--muted);
-    background: rgba(79,140,255,.12);
-    border: 1px solid rgba(79,140,255,.25);
-    padding: 2px 8px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-  }
+  footer{padding:12px 14px;border-top:1px solid var(--border);
+    background:var(--panel-2);display:flex;gap:8px;align-items:flex-end}
+  #input{flex:1;resize:none;min-height:46px;max-height:150px;padding:12px 14px;
+    border-radius:12px;border:1px solid #2b3348;background:var(--bg);color:var(--text);
+    font-family:inherit;font-size:14.5px;outline:none;transition:border-color .15s}
+  #input:focus{border-color:var(--accent)}
+  #send{padding:0 18px;height:46px;border:none;border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;font-weight:700;font-size:14px;cursor:pointer;
+    transition:filter .15s,transform .1s;flex-shrink:0}
+  #send:hover:not(:disabled){filter:brightness(1.12)}
+  #send:active:not(:disabled){transform:scale(.97)}
+  #send:disabled{opacity:.45;cursor:not-allowed}
 
-  .typing { display: flex; gap: 4px; }
-  .typing span {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--muted);
-    animation: blink 1.2s infinite;
-  }
-  .typing span:nth-child(2) { animation-delay: .2s; }
-  .typing span:nth-child(3) { animation-delay: .4s; }
-  @keyframes blink { 0%,60%,100%{opacity:.3;} 30%{opacity:1;} }
+  /* EMBED VIEW */
+  #view-embed{overflow-y:auto}
+  .embed-wrap{padding:22px;display:flex;flex-direction:column;gap:14px;
+    max-width:780px;margin:0 auto;width:100%}
+  .embed-wrap h2{font-size:16px;margin-bottom:2px}
+  .embed-wrap p.hint{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:6px}
+  .embed-wrap p.hint code{color:#a5d6ff;background:#0a0e16;padding:1px 5px;border-radius:4px}
+  .embed-wrap label{font-size:12px;color:var(--muted);display:block;
+    margin-bottom:4px;margin-top:6px}
+  .embed-wrap textarea{width:100%;min-height:80px;padding:11px 13px;border-radius:10px;
+    border:1px solid #2b3348;background:var(--bg);color:var(--text);
+    font-family:inherit;font-size:14px;resize:vertical;outline:none;
+    transition:border-color .15s}
+  .embed-wrap textarea:focus{border-color:var(--accent)}
+  .embed-wrap button{padding:12px;border:none;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff;font-weight:700;font-size:14px;cursor:pointer;
+    transition:filter .15s,transform .1s}
+  .embed-wrap button:hover:not(:disabled){filter:brightness(1.12)}
+  .embed-wrap button:active:not(:disabled){transform:scale(.98)}
+  .embed-wrap button:disabled{opacity:.5;cursor:not-allowed}
+  .box{background:#0a0e16;border:1px solid var(--border);border-radius:10px;
+    padding:13px;font-family:ui-monospace,Menlo,monospace;font-size:12px;
+    line-height:1.55;white-space:pre-wrap;word-break:break-all;color:var(--muted);
+    min-height:44px}
+  .box.ok{border-color:var(--ok);color:#a5e8a8}
+  .box.err{border-color:var(--err);color:#ffb4b4}
+  .score-display{font-size:32px;font-weight:800;text-align:center;
+    padding:10px 0;color:#a5d6ff}
 
-  footer {
-    padding: 12px 14px;
-    border-top: 1px solid var(--border);
-    background: var(--panel-2);
-    display: flex; gap: 8px; align-items: flex-end;
-  }
-  #input {
-    flex: 1; resize: none;
-    min-height: 46px; max-height: 150px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: 1px solid #2b3348;
-    background: var(--bg);
-    color: var(--text);
-    font-family: inherit; font-size: 14.5px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  #input:focus { border-color: var(--accent); }
-  #send {
-    padding: 0 18px;
-    height: 46px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
-    font-weight: 700; font-size: 14px;
-    cursor: pointer;
-    transition: filter .15s, transform .1s;
-    flex-shrink: 0;
-  }
-  #send:hover:not(:disabled) { filter: brightness(1.12); }
-  #send:active:not(:disabled) { transform: scale(.97); }
-  #send:disabled { opacity: .45; cursor: not-allowed; }
+  /* MODAL */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);
+    display:none;place-items:center;padding:16px;z-index:100;overflow-y:auto}
+  .modal.open{display:grid}
+  .modal-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;
+    padding:22px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+  .modal-box h2{font-size:16px;margin-bottom:14px}
+  .modal-box label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+  .modal-box input,.modal-box select{width:100%;padding:10px 12px;border-radius:10px;
+    border:1px solid #2b3348;background:var(--bg);color:var(--text);
+    font-family:inherit;font-size:14px;outline:none}
+  .modal-box input:focus,.modal-box select:focus{border-color:var(--accent)}
+  .modal-box .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .modal-box .hint a{color:var(--accent)}
+  .modal-box .check{display:flex;align-items:center;gap:8px;margin-top:14px;
+    font-size:13px;color:var(--text)}
+  .modal-box .check input{width:auto}
+  .modal-box .actions{margin-top:18px;display:flex;gap:10px;justify-content:flex-end}
+  .modal-box .actions button{padding:10px 16px;border-radius:10px;font-size:13.5px;
+    font-weight:600;cursor:pointer;border:1px solid var(--border);
+    background:var(--panel-2);color:var(--text)}
+  .modal-box .actions button.primary{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff}
 </style>
 </head>
 <body>
@@ -168,65 +148,153 @@
     <div class="logo">NCB</div>
     <div class="brand">
       <h1>NCB TEST</h1>
-      <p id="model-label">openai/gpt-5.4-nano · semantic memory</p>
+      <p id="model-label">openai/gpt-5.4-nano · voyage-4-large</p>
+    </div>
+    <div class="tabs">
+      <button data-tab="chat" class="active">Chat</button>
+      <button data-tab="embed">Embeddings</button>
     </div>
     <div class="tools">
+      <button id="btn-settings" title="Cài đặt">⚙</button>
       <button id="btn-clear" title="Xóa chat + memory">🗑</button>
     </div>
   </header>
 
-  <main id="chat"></main>
+  <!-- CHAT VIEW -->
+  <main id="view-chat" class="view active">
+    <div id="chat"></div>
+    <footer>
+      <textarea id="input" rows="1" placeholder="Nhập tin nhắn… (Enter gửi, Shift+Enter xuống dòng)"></textarea>
+      <button id="send">Gửi</button>
+    </footer>
+  </main>
 
-  <footer>
-    <textarea id="input" rows="1" placeholder="Nhập tin nhắn… (Enter gửi, Shift+Enter xuống dòng)"></textarea>
-    <button id="send">Gửi</button>
-  </footer>
+  <!-- EMBED VIEW -->
+  <main id="view-embed" class="view">
+    <div class="embed-wrap">
+      <h2>Tạo Embedding & So sánh</h2>
+      <p class="hint">
+        Gọi <code>https://ai.mongodb.com/v1/embeddings</code> với key <code>al-...</code>.
+        Model Voyage của MongoDB AI.
+      </p>
+
+      <label>Văn bản A</label>
+      <textarea id="emb-a" placeholder="Ví dụ: Hôm nay trời đẹp và mát mẻ."></textarea>
+
+      <label>Văn bản B (tùy chọn, để so sánh)</label>
+      <textarea id="emb-b" placeholder="Ví dụ: Thời tiết hôm nay thật dễ chịu."></textarea>
+
+      <button id="emb-run">Tạo embedding</button>
+      <div id="emb-out" class="box">Chưa có kết quả.</div>
+    </div>
+  </main>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2>Cài đặt</h2>
+
+    <label>Pollinations API Key (<code>sk_...</code>)</label>
+    <input id="cfg-pkey" type="password" placeholder="sk_..." autocomplete="off" />
+    <div class="hint">
+      Lấy tại <a href="https://enter.pollinations.ai/keys" target="_blank" rel="noopener">enter.pollinations.ai/keys</a> → <em>Create Key</em>.
+    </div>
+
+    <label>MongoDB AI Key (<code>al-...</code>)</label>
+    <input id="cfg-mkey" type="password" placeholder="al-..." autocomplete="off" />
+    <div class="hint">
+      Tạo Model API Key trong MongoDB Atlas → <em>AI Models</em>.
+      Dùng cho semantic memory + tab Embeddings.
+    </div>
+
+    <label>Model chat</label>
+    <select id="cfg-model">
+      <option value="openai/gpt-5.4-nano">OpenAI GPT-5.4 Nano</option>
+      <option value="openai/gpt-4o-mini">OpenAI GPT-4o Mini</option>
+      <option value="anthropic/claude-haiku-4.5">Claude Haiku 4.5</option>
+      <option value="anthropic/claude-sonnet-4.6">Claude Sonnet 4.6</option>
+      <option value="google/gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+      <option value="deepseek/deepseek-v4-flash">DeepSeek V4 Flash</option>
+      <option value="qwen/qwen3.7-plus">Qwen 3.7 Plus</option>
+      <option value="meta/llama-3.3-70b-instruct">Llama 3.3 70B</option>
+    </select>
+
+    <div class="check">
+      <input type="checkbox" id="cfg-memory" />
+      <label for="cfg-memory" style="margin:0;color:var(--text)">Bật semantic memory (dùng embeddings)</label>
+    </div>
+
+    <div class="actions">
+      <button id="btn-cancel">Hủy</button>
+      <button id="btn-save" class="primary">Lưu</button>
+    </div>
+  </div>
 </div>
 
 <script>
-/* =========================================================
-   NCB TEST — Frontend với Semantic Memory (Voyage embeddings)
-   Backend proxy: /api/embed và /api/chat
-   ========================================================= */
+/* =====================================================================
+   NCB TEST — Chat + Semantic Memory (1 file HTML)
+   ---------------------------------------------------------------------
+   - Chat: POST https://gen.pollinations.ai/v1/chat/completions (Bearer sk_...)
+   - Embed: POST https://ai.mongodb.com/v1/embeddings (Bearer al-...)
+   ===================================================================== */
 
-const MODEL = "openai/gpt-5.4-nano";
-const EMBED_MODEL = "voyage-4-large";
-const MAX_HISTORY = 20;
-const TOP_K_MEMORY = 3;
-const SYSTEM_PROMPT = "Bạn là NCB TEST, trợ lý AI thân thiện, trả lời bằng tiếng Việt, ngắn gọn và chính xác. Bạn có bộ nhớ dài hạn về các cuộc hội thoại trước đó; hãy dùng thông tin liên quan nếu được cung cấp.";
+const ENDPOINT_CHAT  = "https://gen.pollinations.ai/v1/chat/completions";
+const ENDPOINT_EMBED = "https://ai.mongodb.com/v1/embeddings";
+const EMBED_MODEL    = "voyage-4-large";
+const MAX_HISTORY    = 20;
+const TOP_K_MEMORY   = 3;
+const SYSTEM_PROMPT  = "Bạn là NCB TEST, trợ lý AI thân thiện, trả lời bằng tiếng Việt, ngắn gọn và chính xác. Bạn có bộ nhớ dài hạn về các cuộc hội thoại trước đó; hãy dùng thông tin liên quan nếu được cung cấp.";
 
-/* ---------- STATE ---------- */
+/* ---------------- STATE ---------------- */
 const state = {
+  pkey:   localStorage.getItem("ncb.pkey")   || "",
+  mkey:   localStorage.getItem("ncb.mkey")   || "",
+  model:  localStorage.getItem("ncb.model")  || "openai/gpt-5.4-nano",
+  memory: localStorage.getItem("ncb.mem") === "1",
   history: JSON.parse(localStorage.getItem("ncb.history") || "[]"),
-  memory: JSON.parse(localStorage.getItem("ncb.memory") || "[]"), // [{ text, role, embedding }]
+  memStore: JSON.parse(localStorage.getItem("ncb.memstore") || "[]"),
   busy: false,
 };
 
-/* ---------- DOM ---------- */
-const chatEl = document.getElementById("chat");
-const inputEl = document.getElementById("input");
-const sendEl = document.getElementById("send");
-const modelLabel = document.getElementById("model-label");
+/* ---------------- DOM ---------------- */
+const chatEl    = document.getElementById("chat");
+const inputEl   = document.getElementById("input");
+const sendEl    = document.getElementById("send");
+const modelLbl  = document.getElementById("model-label");
+const modal     = document.getElementById("modal");
+const cfgPKey   = document.getElementById("cfg-pkey");
+const cfgMKey   = document.getElementById("cfg-mkey");
+const cfgModel  = document.getElementById("cfg-model");
+const cfgMemory = document.getElementById("cfg-memory");
+const embA      = document.getElementById("emb-a");
+const embB      = document.getElementById("emb-b");
+const embOut    = document.getElementById("emb-out");
+const embRun    = document.getElementById("emb-run");
 
-/* ---------- TIỆN ÍCH ---------- */
-function escapeHtml(s) {
+/* ---------------- HELPERS ---------------- */
+function escapeHtml(s){
   return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-function renderMarkdown(text) {
-  let html = escapeHtml(text);
-  html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, _l, c) =>
-    `<pre><code>${c.replace(/\n$/,"")}</code></pre>`);
-  html = html.replace(/`([^`\n]+)`/g, "<code>$1</code>");
-  html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  return html;
+function renderMarkdown(text){
+  let h = escapeHtml(text);
+  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, (_,_l,c)=>`<pre><code>${c.replace(/\n$/,"")}</code></pre>`);
+  h = h.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  return h;
 }
-function saveState() {
+function saveState(){
+  localStorage.setItem("ncb.pkey", state.pkey);
+  localStorage.setItem("ncb.mkey", state.mkey);
+  localStorage.setItem("ncb.model", state.model);
+  localStorage.setItem("ncb.mem", state.memory ? "1" : "0");
   localStorage.setItem("ncb.history", JSON.stringify(state.history.slice(-100)));
-  localStorage.setItem("ncb.memory", JSON.stringify(state.memory.slice(-200)));
+  localStorage.setItem("ncb.memstore", JSON.stringify(state.memStore.slice(-200)));
 }
-function scrollBottom() { chatEl.scrollTop = chatEl.scrollHeight; }
+function scrollBottom(){ chatEl.scrollTop = chatEl.scrollHeight; }
 
-function addBubble(role, text, extra = "") {
+function addBubble(role, text, extra=""){
   const div = document.createElement("div");
   div.className = "msg " + role;
   const content = role === "bot" ? renderMarkdown(text) : escapeHtml(text);
@@ -235,8 +303,7 @@ function addBubble(role, text, extra = "") {
   scrollBottom();
   return div;
 }
-
-function showTyping() {
+function showTyping(){
   const d = document.createElement("div");
   d.className = "msg bot typing";
   d.id = "typing-ind";
@@ -244,74 +311,91 @@ function showTyping() {
   chatEl.appendChild(d);
   scrollBottom();
 }
-function hideTyping() { document.getElementById("typing-ind")?.remove(); }
-
-function setBusy(v) {
+function hideTyping(){ document.getElementById("typing-ind")?.remove(); }
+function setBusy(v){
   state.busy = v;
   sendEl.disabled = v;
   inputEl.disabled = v;
 }
+function updateModelLabel(){
+  modelLbl.textContent = state.model + " · " + EMBED_MODEL +
+    (state.memory ? " · 🧠 memory" : "");
+}
 
-/* ---------- EMBEDDING ---------- */
-async function getEmbedding(text, inputType = "document") {
-  const res = await fetch("/api/embed", {
+/* ---------------- EMBEDDING ---------------- */
+async function getEmbedding(text, inputType="document"){
+  if (!state.mkey || !state.mkey.startsWith("al-")) {
+    throw new Error("Chưa có MongoDB AI key (al-...). Bấm ⚙ để nhập.");
+  }
+  const res = await fetch(ENDPOINT_EMBED, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input: text, model: EMBED_MODEL, input_type: inputType }),
+    headers: {
+      "Authorization": "Bearer " + state.mkey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      input: [text],
+      model: EMBED_MODEL,
+      input_type: inputType,
+    }),
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error("Embedding thất bại: " + err);
+    throw new Error(`Embed HTTP ${res.status}: ${err.slice(0, 200)}`);
   }
   const data = await res.json();
-  // MongoDB/Voyage trả về { data: [{ embedding: [...] }, ...] }
   const vec = data?.data?.[0]?.embedding;
   if (!vec || !Array.isArray(vec)) throw new Error("Không nhận được vector embedding");
   return vec;
 }
 
-/* ---------- SIMILARITY ---------- */
-function cosineSimilarity(a, b) {
+/* ---------------- SIMILARITY ---------------- */
+function cosine(a, b){
   if (a.length !== b.length) return 0;
-  let dot = 0, magA = 0, magB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    magA += a[i] * a[i];
-    magB += b[i] * b[i];
+  let dot=0, ma=0, mb=0;
+  for (let i=0; i<a.length; i++){
+    dot += a[i]*b[i];
+    ma  += a[i]*a[i];
+    mb  += b[i]*b[i];
   }
-  const denom = Math.sqrt(magA) * Math.sqrt(magB);
-  return denom === 0 ? 0 : dot / denom;
+  const d = Math.sqrt(ma)*Math.sqrt(mb);
+  return d === 0 ? 0 : dot/d;
 }
 
-/* ---------- RETRIEVE MEMORY ---------- */
-async function retrieveRelevantMemory(queryText, topK = TOP_K_MEMORY) {
-  if (state.memory.length === 0) return [];
+/* ---------------- MEMORY ---------------- */
+async function retrieveMemory(queryText, topK = TOP_K_MEMORY){
+  if (!state.memory) return [];
+  if (state.memStore.length === 0) return [];
   const qVec = await getEmbedding(queryText, "query");
-
-  const scored = state.memory
-    .map((m) => ({ ...m, score: cosineSimilarity(qVec, m.embedding) }))
-    .filter((m) => m.score > 0.35) // ngưỡng tương đồng tối thiểu
-    .sort((a, b) => b.score - a.score)
+  const scored = state.memStore
+    .map(m => ({ ...m, score: cosine(qVec, m.embedding) }))
+    .filter(m => m.score > 0.35)
+    .sort((a,b) => b.score - a.score)
     .slice(0, topK);
-
   return scored;
 }
-
-/* ---------- LƯU MEMORY ---------- */
-async function storeMemory(text, role) {
+async function storeMemory(text, role){
+  if (!state.memory) return;
+  if (!state.mkey) return;
   try {
     const vec = await getEmbedding(text, "document");
-    state.memory.push({ text, role, embedding: vec, ts: Date.now() });
+    state.memStore.push({ text, role, embedding: vec, ts: Date.now() });
     saveState();
   } catch (e) {
-    console.warn("Không lưu được memory:", e.message);
+    console.warn("Lưu memory thất bại:", e.message);
   }
 }
 
-/* ---------- GỬI TIN NHẮN ---------- */
-async function send() {
+/* ---------------- GỬI TIN NHẮN ---------------- */
+async function send(){
   const text = inputEl.value.trim();
   if (!text || state.busy) return;
+
+  if (!state.pkey || !state.pkey.startsWith("sk_")) {
+    addBubble("bot",
+      "⚠️ Chưa có Pollinations key hợp lệ (`sk_...`).\nBấm **⚙** để nhập.");
+    return;
+  }
 
   inputEl.value = "";
   inputEl.style.height = "auto";
@@ -323,69 +407,81 @@ async function send() {
   showTyping();
 
   try {
-    // 1. Truy xuất memory liên quan
-    let memoryContext = "";
+    /* 1. Truy xuất memory liên quan (nếu bật) */
+    let memCtx = "";
     try {
-      const relevant = await retrieveRelevantMemory(text);
-      if (relevant.length > 0) {
-        memoryContext =
-          "\n\n[NGỮ CẢNH TỪ BỘ NHỚ]\n" +
-          relevant
-            .map((m) => `- ${m.role === "user" ? "Người dùng" : "Trợ lý"}: ${m.text}`)
-            .join("\n");
+      const rel = await retrieveMemory(text);
+      if (rel.length > 0){
+        memCtx = "\n\n[NGỮ CẢNH TỪ BỘ NHỚ]\n" +
+          rel.map(m =>
+            `- ${m.role === "user" ? "Người dùng" : "Trợ lý"}: ${m.text}`
+          ).join("\n");
       }
-    } catch (e) {
+    } catch (e){
       console.warn("Retrieve memory lỗi:", e.message);
     }
 
-    // 2. Gọi chat với streaming
+    /* 2. Gọi chat streaming */
     const messages = [
-      { role: "system", content: SYSTEM_PROMPT + memoryContext },
-      ...state.history.slice(-MAX_HISTORY).map((m) => ({
+      { role: "system", content: SYSTEM_PROMPT + memCtx },
+      ...state.history.slice(-MAX_HISTORY).map(m => ({
         role: m.role === "user" ? "user" : "assistant",
         content: m.content,
       })),
     ];
 
-    const res = await fetch("/api/chat", {
+    const res = await fetch(ENDPOINT_CHAT, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: MODEL, messages, stream: true, temperature: 0.7 }),
+      headers: {
+        "Authorization": "Bearer " + state.pkey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: state.model,
+        messages,
+        stream: true,
+        temperature: 0.7,
+      }),
     });
 
-    if (!res.ok) {
+    if (!res.ok){
       let msg = `HTTP ${res.status}`;
       try { const j = await res.json(); msg = j?.error?.message || msg; } catch {}
+      if (res.status === 401) msg += " — kiểm tra key (phải là sk_...)";
+      if (res.status === 402) msg += " — hết budget";
       throw new Error(msg);
     }
 
     hideTyping();
-    const botEl = addBubble("bot", "", `<div class="memory-badge">🧠 Đã dùng ${memoryContext ? "bộ nhớ" : "ngữ cảnh trực tiếp"}</div>`);
+    const badgeText = memCtx ? "🧠 Đã dùng bộ nhớ" : "Ngữ cảnh trực tiếp";
+    const botEl = addBubble("bot", "", `<div class="memory-badge">${badgeText}</div>`);
     let acc = "";
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
 
-    while (true) {
+    while (true){
       const { value, done } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
 
       let idx;
-      while ((idx = buffer.indexOf("\n\n")) !== -1) {
+      while ((idx = buffer.indexOf("\n\n")) !== -1){
         const chunk = buffer.slice(0, idx);
         buffer = buffer.slice(idx + 2);
-        for (const line of chunk.split("\n")) {
+        for (const line of chunk.split("\n")){
           if (!line.startsWith("data:")) continue;
           const data = line.slice(5).trim();
           if (!data || data === "[DONE]") continue;
           try {
             const json = JSON.parse(data);
             const delta = json?.choices?.[0]?.delta?.content;
-            if (delta) {
+            if (delta){
               acc += delta;
-              botEl.innerHTML = `<div class="memory-badge">🧠 ${memoryContext ? "Đã dùng bộ nhớ" : "Ngữ cảnh trực tiếp"}</div>` + renderMarkdown(acc);
+              botEl.innerHTML =
+                `<div class="memory-badge">${badgeText}</div>` +
+                renderMarkdown(acc);
               scrollBottom();
             }
           } catch (_) {}
@@ -397,10 +493,10 @@ async function send() {
     state.history.push({ role: "assistant", content: finalReply });
     saveState();
 
-    // 3. Lưu cả câu hỏi và câu trả lời vào memory
+    /* 3. Lưu vào memory */
     await storeMemory(text, "user");
     await storeMemory(finalReply, "assistant");
-  } catch (err) {
+  } catch (err){
     hideTyping();
     addBubble("bot", "❌ Lỗi: " + err.message);
   } finally {
@@ -409,48 +505,119 @@ async function send() {
   }
 }
 
-/* ---------- RENDER HISTORY ---------- */
-function renderHistory() {
+/* ---------------- RENDER HISTORY ---------------- */
+function renderHistory(){
   chatEl.innerHTML = "";
-  if (state.history.length === 0) {
+  if (state.history.length === 0){
     addBubble("bot",
-      "Xin chào 👋 Mình là **NCB TEST**, có **bộ nhớ ngữ nghĩa** dùng MongoDB AI.\n\n" +
-      "• Hãy chat bình thường — mình sẽ tự nhớ các ý chính.\n" +
-      "• Khi bạn hỏi lại chủ đề cũ, mình sẽ truy xuất ký ức liên quan."
+      "Xin chào 👋 Mình là **NCB TEST**.\n\n" +
+      "• Bấm **⚙** để nhập 2 key: `sk_...` (Pollinations) và `al-...` (MongoDB AI).\n" +
+      "• Bật **semantic memory** để bot nhớ các ý chính.\n" +
+      "• Tab **Embeddings** để test tạo vector và so sánh."
     );
     return;
   }
-  state.history.forEach((m) => addBubble(m.role === "user" ? "user" : "bot", m.content));
+  state.history.forEach(m => addBubble(m.role === "user" ? "user" : "bot", m.content));
 }
 
-/* ---------- SỰ KIỆN ---------- */
+/* ---------------- TAB EMBEDDINGS ---------------- */
+async function runEmbedding(){
+  const a = embA.value.trim();
+  const b = embB.value.trim();
+  if (!a) { embOut.className = "box err"; embOut.textContent = "Cần ít nhất văn bản A."; return; }
+
+  embRun.disabled = true;
+  embOut.className = "box";
+  embOut.textContent = "Đang tạo embedding…";
+
+  try {
+    const vA = await getEmbedding(a, "document");
+    let out = `✅ Vector A: ${vA.length} chiều\n`;
+    out += `Mẫu 5 chiều đầu: [${vA.slice(0,5).map(x=>x.toFixed(4)).join(", ")}, …]\n`;
+
+    if (b){
+      const vB = await getEmbedding(b, "document");
+      const score = cosine(vA, vB);
+      out += `\n✅ Vector B: ${vB.length} chiều\n`;
+      out += `\n📊 Cosine similarity A↔B:\n\n   ${score.toFixed(4)}\n\n`;
+      out += `→ ${score > 0.8 ? "Rất giống nhau" :
+             score > 0.6 ? "Khá giống nhau" :
+             score > 0.4 ? "Hơi liên quan" :
+                          "Không liên quan"}`;
+    }
+    embOut.className = "box ok";
+    embOut.textContent = out;
+  } catch (e){
+    embOut.className = "box err";
+    embOut.textContent = "❌ " + e.message +
+      "\n\nNếu gặp lỗi CORS: MongoDB AI chưa mở CORS cho trình duyệt — cần proxy Node (xem hướng dẫn cuối).";
+  } finally {
+    embRun.disabled = false;
+  }
+}
+
+/* ---------------- EVENTS ---------------- */
 sendEl.addEventListener("click", send);
 inputEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+  if (e.key === "Enter" && !e.shiftKey){ e.preventDefault(); send(); }
 });
 inputEl.addEventListener("input", () => {
   inputEl.style.height = "auto";
   inputEl.style.height = Math.min(inputEl.scrollHeight, 150) + "px";
 });
 
+embRun.addEventListener("click", runEmbedding);
+
 document.getElementById("btn-clear").addEventListener("click", () => {
   if (!confirm("Xóa toàn bộ lịch sử chat và bộ nhớ?")) return;
   state.history = [];
-  state.memory = [];
+  state.memStore = [];
   saveState();
   renderHistory();
 });
 
-/* ---------- KHỞI ĐỘNG ---------- */
-modelLabel.textContent = MODEL + " · " + EMBED_MODEL;
+document.getElementById("btn-settings").addEventListener("click", () => {
+  cfgPKey.value   = state.pkey;
+  cfgMKey.value   = state.mkey;
+  cfgModel.value  = state.model;
+  cfgMemory.checked = state.memory;
+  modal.classList.add("open");
+});
+document.getElementById("btn-cancel").addEventListener("click", () => {
+  modal.classList.remove("open");
+});
+document.getElementById("btn-save").addEventListener("click", () => {
+  state.pkey   = cfgPKey.value.trim();
+  state.mkey   = cfgMKey.value.trim();
+  state.model  = cfgModel.value;
+  state.memory = cfgMemory.checked;
+  saveState();
+  updateModelLabel();
+  modal.classList.remove("open");
+});
+
+/* Tab switching */
+document.querySelectorAll(".tabs button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("view-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+/* ---------------- BOOT ---------------- */
+updateModelLabel();
 renderHistory();
-
-// Kiểm tra backend
-fetch("/api/health").then(r => r.json()).then(h => {
-  if (!h.mongodb) console.warn("MongoDB AI key chưa cấu hình — memory sẽ không hoạt động.");
-  if (!h.pollinations) console.warn("Pollinations key chưa cấu hình — chat sẽ không hoạt động.");
-}).catch(() => {});
-
+if (!state.pkey || !state.mkey){
+  setTimeout(() => {
+    cfgPKey.value   = state.pkey;
+    cfgMKey.value   = state.mkey;
+    cfgModel.value  = state.model;
+    cfgMemory.checked = state.memory;
+    modal.classList.add("open");
+  }, 400);
+}
 inputEl.focus();
 </script>
 </body>
