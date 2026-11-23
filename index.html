@@ -53,33 +53,7 @@ img{
   -khtml-user-drag:none;-moz-user-drag:none;-o-user-drag:none;user-drag:none;
 }
 
-/* ===== GATE ===== */
-#ncbGate{
-  position:fixed;inset:0;z-index:20000;background:#000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px;gap:18px;text-align:center;
-}
-#ncbGate.hidden{display:none}
-#ncbGate .gate-logo{
-  width:72px;height:72px;border-radius:20px;overflow:hidden;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  box-shadow:0 5px 22px #2563eb55;
-}
-#ncbGate .gate-logo img{width:100%;height:100%;object-fit:cover;display:block}
-#ncbGate h2{margin:0;font-size:22px}
-#ncbGate p{margin:0;color:#94a3b8;font-size:14px;max-width:360px;line-height:1.5}
-#ncbGateStatus{color:#60a5fa;font-size:13px;min-height:18px}
-#ncbGateStatus.error{color:#f87171}
-.gate-site-id{font-family:monospace;font-size:11px;color:#475569;margin-top:6px;letter-spacing:.3px;word-break:break-all}
-#ncbGateIdError{
-  display:none;color:#f87171;background:#3b1c1c;border:1px solid #ef4444;
-  padding:12px 16px;border-radius:10px;font-size:13px;max-width:340px;
-  line-height:1.5;text-align:center;
-}
-#ncbGateIdError.show{display:block}
-
-#ncbMain{display:none}
-#ncbMain.unlocked{display:block}
+#ncbMain{display:block}
 
 .header{display:flex;align-items:center;gap:12px;margin:10px 0 35px}
 .logo{
@@ -154,20 +128,11 @@ button{border:0;cursor:pointer;font-family:inherit}
 .ncbNotice.error b{color:#f87171}
 @keyframes noticeIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 
-/* =========================================================
-   NÚT CÀI ĐẶT — VUÔNG, GÓC PHẢI TRÊN
-   ========================================================= */
 #ncbSettingsBtn{
-  position:fixed;
-  top:14px;
-  right:14px;
-  width:46px;height:46px;
-  border-radius:10px;
-  border:2px solid #60a5fa;
-  background:#0d1729;
-  color:#60a5fa;
-  display:none;
-  align-items:center;justify-content:center;
+  position:fixed;top:14px;right:14px;
+  width:46px;height:46px;border-radius:10px;
+  border:2px solid #60a5fa;background:#0d1729;color:#60a5fa;
+  display:flex;align-items:center;justify-content:center;
   z-index:9999;cursor:pointer;
   box-shadow:0 5px 20px #2563eb55;
   transition:transform .15s ease, box-shadow .2s ease, background .2s ease;
@@ -177,48 +142,32 @@ button{border:0;cursor:pointer;font-family:inherit}
 #ncbSettingsBtn:active{transform:scale(.94)}
 #ncbSettingsBtn svg{width:22px;height:22px;display:block}
 
-/* =========================================================
-   PANEL CÀI ĐẶT — HÌNH VUÔNG, HIỆN GIỮA MÀN HÌNH
-   ========================================================= */
 #ncbSettingsOverlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.72);
-  z-index:10000;
-  display:none;
-  align-items:center;justify-content:center;
-  padding:16px;
-  animation:fadeIn .2s ease;
+  position:fixed;inset:0;background:rgba(0,0,0,0.72);
+  z-index:10000;display:none;align-items:center;justify-content:center;
+  padding:16px;animation:fadeIn .2s ease;
 }
 #ncbSettingsOverlay.open{display:flex}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
 #ncbSettingsPanel{
-  background:#0d1729;
-  border:1px solid #334968;
-  border-radius:16px;
-  width:min(360px,100%);
-  max-height:85vh;
+  background:#0d1729;border:1px solid #334968;border-radius:16px;
+  width:min(360px,100%);max-height:85vh;
   display:flex;flex-direction:column;
-  box-shadow:0 20px 60px #000b;
-  animation:modalIn .25s ease;
-  color:#e2e8f0;
-  overflow:hidden;
+  box-shadow:0 20px 60px #000b;animation:modalIn .25s ease;
+  color:#e2e8f0;overflow:hidden;
 }
 @keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 .settingsHeader{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;
-  background:linear-gradient(120deg,#2563eb,#5935bd);
-  flex-shrink:0;
+  padding:14px 18px;background:linear-gradient(120deg,#2563eb,#5935bd);flex-shrink:0;
 }
 .settingsHeader b{font-size:15px;color:#fff;letter-spacing:.3px}
 #ncbSettingsClose{
   width:32px;height:32px;border-radius:8px;
-  background:rgba(255,255,255,0.15);
-  color:#fff;font-weight:bold;font-size:15px;line-height:1;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s ease;
+  background:rgba(255,255,255,0.15);color:#fff;font-weight:bold;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:background .15s ease;
 }
 #ncbSettingsClose:hover{background:rgba(239,68,68,0.5)}
 
@@ -230,15 +179,10 @@ button{border:0;cursor:pointer;font-family:inherit}
 
 .ncbSwitch{position:relative;display:inline-block;width:52px;height:28px;flex-shrink:0}
 .ncbSwitch input{opacity:0;width:0;height:0}
-.ncbSwitch .slider{
-  position:absolute;inset:0;cursor:pointer;
-  background:#475569;border-radius:28px;
-  transition:background .25s ease;
-}
+.ncbSwitch .slider{position:absolute;inset:0;cursor:pointer;background:#475569;border-radius:28px;transition:background .25s ease}
 .ncbSwitch .slider::before{
   content:"";position:absolute;width:22px;height:22px;border-radius:50%;
-  left:3px;top:3px;background:#e2e8f0;
-  transition:transform .25s ease, background .25s ease;
+  left:3px;top:3px;background:#e2e8f0;transition:transform .25s ease, background .25s ease;
 }
 .ncbSwitch input:checked + .slider{background:#22c55e}
 .ncbSwitch input:checked + .slider::before{transform:translateX(24px);background:#fff}
@@ -249,60 +193,40 @@ button{border:0;cursor:pointer;font-family:inherit}
 .volumeHead b{color:#60a5fa;font-family:monospace;font-size:13px}
 
 input[type="range"].ncbRange{
-  -webkit-appearance:none;appearance:none;
-  width:100%;height:6px;border-radius:6px;
+  -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;
   background:linear-gradient(90deg,#2563eb var(--vol,80%),#1e293b var(--vol,80%));
   outline:none;padding:0;border:0;cursor:pointer;
 }
 input[type="range"].ncbRange::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:18px;height:18px;border-radius:50%;
-  background:#60a5fa;border:2px solid #0d1729;
-  box-shadow:0 0 0 2px #2563eb66;cursor:pointer;
+  -webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;
+  background:#60a5fa;border:2px solid #0d1729;box-shadow:0 0 0 2px #2563eb66;cursor:pointer;
 }
 input[type="range"].ncbRange::-moz-range-thumb{
-  width:16px;height:16px;border-radius:50%;
-  background:#60a5fa;border:2px solid #0d1729;
+  width:16px;height:16px;border-radius:50%;background:#60a5fa;border:2px solid #0d1729;
   box-shadow:0 0 0 2px #2563eb66;cursor:pointer;
 }
 input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;background:#1e293b}
 
-#ncbSettingsHint{
-  padding:12px 14px;
-  font-size:11px;color:#64748b;line-height:1.5;
-  border-top:1px solid rgba(96,165,250,0.15);
-  text-align:center;
-  flex-shrink:0;
-}
-#turnstile-container{margin-bottom:4px}
-.turnstile-note{font-size:12px;color:#f59e0b;margin-top:6px}
+#ncbSettingsHint{padding:12px 14px;font-size:11px;color:#64748b;line-height:1.5;border-top:1px solid rgba(96,165,250,0.15);text-align:center;flex-shrink:0}
 
-/* =========================================================
-   MODAL LỊCH SỬ BÁO CÁO
-   ========================================================= */
-#ncbHistoryModal{
-  position:fixed;inset:0;z-index:15000;
-  background:rgba(0,0,0,0.72);
-  display:none;align-items:center;justify-content:center;
-  padding:16px;
+#ncbHistoryModal,#ncbDetailModal,#ncbWelcomeModal{
+  position:fixed;inset:0;background:rgba(0,0,0,0.75);
+  display:none;align-items:center;justify-content:center;padding:16px;
   animation:fadeIn .2s ease;
 }
-#ncbHistoryModal.open{display:flex}
+#ncbHistoryModal{z-index:15000}
+#ncbDetailModal{z-index:16000;background:rgba(0,0,0,0.78)}
+#ncbWelcomeModal{z-index:14000}
+#ncbHistoryModal.open,#ncbDetailModal.open,#ncbWelcomeModal.open{display:flex}
 
 .ncbHistoryBox{
   background:#0d1729;border:1px solid #334968;border-radius:16px;
-  width:min(520px,100%);max-height:85vh;
-  display:flex;flex-direction:column;
-  box-shadow:0 20px 60px #000b;
-  animation:modalIn .25s ease;
-  overflow:hidden;
+  width:min(520px,100%);max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px #000b;animation:modalIn .25s ease;overflow:hidden;
 }
-
 .ncbHistoryHeader{
-  padding:14px 18px;
-  background:linear-gradient(120deg,#2563eb,#5935bd);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
+  padding:14px 18px;background:linear-gradient(120deg,#2563eb,#5935bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .ncbHistoryHeader b{font-size:15px;color:#fff}
 #ncbHistoryClose{
@@ -311,73 +235,36 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   display:flex;align-items:center;justify-content:center;
 }
 #ncbHistoryClose:hover{background:#ef444466}
-
-#ncbHistoryList{
-  flex:1;overflow-y:auto;padding:14px;
-  display:flex;flex-direction:column;gap:10px;
-}
+#ncbHistoryList{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
 #ncbHistoryList::-webkit-scrollbar{width:6px}
 #ncbHistoryList::-webkit-scrollbar-thumb{background:#2563eb;border-radius:3px}
-
-.ncbHistoryEmpty{
-  text-align:center;padding:50px 20px;color:#64748b;font-size:14px;line-height:1.7;
-}
+.ncbHistoryEmpty{text-align:center;padding:50px 20px;color:#64748b;font-size:14px;line-height:1.7}
 .ncbHistoryEmpty b{display:block;color:#94a3b8;font-size:15px;margin-bottom:6px}
-
 .ncbHistoryItem{
-  background:#111c30;border:1px solid #1e2a42;border-radius:12px;
-  padding:12px 14px;
-  cursor:pointer;
-  transition:all .15s ease;
-  -webkit-tap-highlight-color:transparent;
+  background:#111c30;border:1px solid #1e2a42;border-radius:12px;padding:12px 14px;
+  cursor:pointer;transition:all .15s ease;-webkit-tap-highlight-color:transparent;
 }
 .ncbHistoryItem:hover{background:#16263f;border-color:#3b82f6;transform:translateX(2px)}
 .ncbHistoryItem:active{transform:translateX(0)}
-
-.ncbHistoryItem .hi-top{
-  display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;
-}
-.ncbHistoryItem .hi-id{
-  font-family:monospace;font-size:12px;font-weight:bold;color:#60a5fa;
-  letter-spacing:.5px;
-}
+.ncbHistoryItem .hi-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.ncbHistoryItem .hi-id{font-family:monospace;font-size:12px;font-weight:bold;color:#60a5fa;letter-spacing:.5px}
 .ncbHistoryItem .hi-status{
   font-size:10px;font-weight:bold;padding:2px 8px;border-radius:10px;
   background:#22c55e22;color:#4ade80;border:1px solid #22c55e55;
   text-transform:uppercase;letter-spacing:.4px;
 }
-.ncbHistoryItem .hi-title{
-  font-size:14px;color:#e2e8f0;margin-bottom:4px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.ncbHistoryItem .hi-meta{
-  font-size:11px;color:#64748b;
-  display:flex;gap:10px;flex-wrap:wrap;
-}
-.ncbHistoryItem .hi-type{color:#a78bfa;}
-
-#ncbDetailModal{
-  position:fixed;inset:0;z-index:16000;
-  background:rgba(0,0,0,0.78);
-  display:none;align-items:center;justify-content:center;
-  padding:16px;
-  animation:fadeIn .2s ease;
-}
-#ncbDetailModal.open{display:flex}
+.ncbHistoryItem .hi-title{font-size:14px;color:#e2e8f0;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ncbHistoryItem .hi-meta{font-size:11px;color:#64748b;display:flex;gap:10px;flex-wrap:wrap}
+.ncbHistoryItem .hi-type{color:#a78bfa}
 
 .ncbDetailBox{
   background:#0d1729;border:1px solid #334968;border-radius:16px;
-  width:min(480px,100%);max-height:85vh;
-  display:flex;flex-direction:column;
-  box-shadow:0 20px 60px #000b;
-  animation:modalIn .25s ease;
-  overflow:hidden;
+  width:min(480px,100%);max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px #000b;animation:modalIn .25s ease;overflow:hidden;
 }
 .ncbDetailHeader{
-  padding:14px 18px;
-  background:linear-gradient(120deg,#16a34a,#22c55e);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
+  padding:14px 18px;background:linear-gradient(120deg,#16a34a,#22c55e);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .ncbDetailHeader b{font-size:14px;color:#fff;letter-spacing:.3px}
 #ncbDetailClose{
@@ -386,202 +273,66 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   display:flex;align-items:center;justify-content:center;
 }
 #ncbDetailClose:hover{background:#ef444466}
-
-#ncbDetailBody{
-  flex:1;overflow-y:auto;padding:18px;
-  display:flex;flex-direction:column;gap:14px;
-}
+#ncbDetailBody{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
 #ncbDetailBody::-webkit-scrollbar{width:6px}
 #ncbDetailBody::-webkit-scrollbar-thumb{background:#22c55e;border-radius:3px}
-
-.ncbDetailField{
-  display:flex;flex-direction:column;gap:4px;
-  padding-bottom:12px;
-  border-bottom:1px solid #1e2a42;
-}
+.ncbDetailField{display:flex;flex-direction:column;gap:4px;padding-bottom:12px;border-bottom:1px solid #1e2a42}
 .ncbDetailField:last-child{border-bottom:0;padding-bottom:0}
-.ncbDetailField label{
-  margin:0;
-  font-size:11px;
-  color:#64748b;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  font-weight:bold;
-}
-.ncbDetailField .value{
-  font-size:14px;
-  color:#e2e8f0;
-  line-height:1.5;
-  overflow-wrap:anywhere;
-  white-space:pre-wrap;
-}
-.ncbDetailField .value.mono{
-  font-family:monospace;
-  font-size:13px;
-  color:#60a5fa;
-}
-.ncbDetailField .value.desc{
-  background:#0b1424;
-  border:1px solid #1e2a42;
-  border-radius:8px;
-  padding:10px 12px;
-  max-height:200px;
-  overflow-y:auto;
-}
-
-/* =========================================================
-   MODAL THÔNG BÁO CHÀO MỪNG
-   ========================================================= */
-#ncbWelcomeModal{
-  position:fixed;inset:0;z-index:14000;
-  background:rgba(0,0,0,0.72);
-  display:none;align-items:center;justify-content:center;
-  padding:16px;
-  animation:fadeIn .25s ease;
-}
-#ncbWelcomeModal.open{display:flex}
+.ncbDetailField label{margin:0;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;font-weight:bold}
+.ncbDetailField .value{font-size:14px;color:#e2e8f0;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+.ncbDetailField .value.mono{font-family:monospace;font-size:13px;color:#60a5fa}
+.ncbDetailField .value.desc{background:#0b1424;border:1px solid #1e2a42;border-radius:8px;padding:10px 12px;max-height:200px;overflow-y:auto}
 
 .ncbWelcomeBox{
-  background:#0d1729;
-  border:1px solid #334968;
-  border-radius:16px;
-  width:min(440px,100%);
-  max-height:88vh;
-  display:flex;flex-direction:column;
-  box-shadow:0 20px 60px #000b;
-  animation:modalIn .28s ease;
-  overflow:hidden;
-  position:relative;
+  background:#0d1729;border:1px solid #334968;border-radius:16px;
+  width:min(440px,100%);max-height:88vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px #000b;animation:modalIn .28s ease;overflow:hidden;position:relative;
 }
 .ncbWelcomeHeader{
-  padding:16px 18px;
-  background:linear-gradient(120deg,#2563eb,#5935bd);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
+  padding:16px 18px;background:linear-gradient(120deg,#2563eb,#5935bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .ncbWelcomeHeader b{font-size:16px;color:#fff;letter-spacing:.3px}
 #ncbWelcomeClose{
-  width:34px;height:34px;border-radius:9px;
-  background:#ffffff25;color:#fff;
+  width:34px;height:34px;border-radius:9px;background:#ffffff25;color:#fff;
   font-weight:bold;font-size:17px;line-height:1;
   display:flex;align-items:center;justify-content:center;
   transition:background .15s ease, transform .15s ease;
 }
 #ncbWelcomeClose:hover{background:#ef444488;transform:scale(1.05)}
-#ncbWelcomeClose:active{transform:scale(.95)}
-
-.ncbWelcomeBody{
-  padding:22px 20px;
-  display:flex;flex-direction:column;gap:16px;
-  overflow-y:auto;
-  color:#cbd5e1;
-  font-size:14px;
-  line-height:1.65;
-}
+.ncbWelcomeBody{padding:22px 20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;color:#cbd5e1;font-size:14px;line-height:1.65}
 .ncbWelcomeBody::-webkit-scrollbar{width:6px}
 .ncbWelcomeBody::-webkit-scrollbar-thumb{background:#2563eb;border-radius:3px}
-
-.ncbWelcomeBody .wl-logo{
-  width:64px;height:64px;
-  border-radius:16px;
-  overflow:hidden;
-  margin:0 auto 6px;
-  box-shadow:0 4px 18px #2563eb66;
-}
-.ncbWelcomeBody .wl-logo img{
-  width:100%;height:100%;object-fit:cover;display:block;
-}
-
-.ncbWelcomeBody h3{
-  margin:0;
-  text-align:center;
-  color:#fff;
-  font-size:17px;
-  font-weight:700;
-}
-
+.ncbWelcomeBody .wl-logo{width:64px;height:64px;border-radius:16px;overflow:hidden;margin:0 auto 6px;box-shadow:0 4px 18px #2563eb66}
+.ncbWelcomeBody .wl-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.ncbWelcomeBody h3{margin:0;text-align:center;color:#fff;font-size:17px;font-weight:700}
 .ncbWelcomeBody .wl-badge{
-  display:inline-block;
-  padding:4px 12px;
-  background:#22c55e22;
-  color:#4ade80;
-  border:1px solid #22c55e55;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:bold;
-  letter-spacing:.5px;
-  text-align:center;
-  margin:0 auto;
+  display:inline-block;padding:4px 12px;background:#22c55e22;color:#4ade80;
+  border:1px solid #22c55e55;border-radius:20px;font-size:11px;font-weight:bold;
+  letter-spacing:.5px;text-align:center;margin:0 auto;
 }
-
-.ncbWelcomeBody p{
-  margin:0;
-  text-align:center;
-}
-
-.ncbWelcomeTips{
-  background:#111c30;
-  border:1px solid #1e2a42;
-  border-radius:12px;
-  padding:14px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.ncbWelcomeTips .wl-tip{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  font-size:13px;
-  line-height:1.55;
-}
+.ncbWelcomeBody p{margin:0;text-align:center}
+.ncbWelcomeTips{background:#111c30;border:1px solid #1e2a42;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.ncbWelcomeTips .wl-tip{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.55}
 .ncbWelcomeTips .wl-tip .wl-icon{
-  flex-shrink:0;
-  width:22px;height:22px;
-  border-radius:6px;
-  background:#2563eb33;
-  color:#60a5fa;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:bold;
-  margin-top:1px;
+  flex-shrink:0;width:22px;height:22px;border-radius:6px;
+  background:#2563eb33;color:#60a5fa;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:bold;margin-top:1px;
 }
-.ncbWelcomeTips .wl-tip .wl-text{
-  color:#cbd5e1;
-}
-.ncbWelcomeTips .wl-tip .wl-text b{
-  color:#fff;
-}
-
+.ncbWelcomeTips .wl-tip .wl-text{color:#cbd5e1}
+.ncbWelcomeTips .wl-tip .wl-text b{color:#fff}
 #ncbWelcomeOk{
-  padding:14px;
-  border-radius:11px;
-  background:linear-gradient(135deg,#2563eb,#3b82f6);
-  color:#fff;
-  font-weight:bold;
-  font-size:15px;
-  width:100%;
-  margin-top:4px;
+  padding:14px;border-radius:11px;background:linear-gradient(135deg,#2563eb,#3b82f6);
+  color:#fff;font-weight:bold;font-size:15px;width:100%;margin-top:4px;
   transition:transform .15s ease, box-shadow .2s ease;
 }
 #ncbWelcomeOk:hover{transform:translateY(-1px);box-shadow:0 6px 20px #2563eb88}
-#ncbWelcomeOk:active{transform:translateY(0)}
 
-/* =========================================================
-   NÚT CHAT AI + KHUNG CHAT
-   ========================================================= */
+/* ===== CHAT AI ===== */
 #ncbAiChatBtn{
-  position:fixed;
-  right:20px;
-  bottom:22px;
-  width:56px;height:56px;
-  border-radius:50%;
-  border:2px solid #60a5fa;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
-  color:#fff;
-  display:none;
-  align-items:center;justify-content:center;
-  z-index:9998;
-  cursor:pointer;
+  position:fixed;right:20px;bottom:22px;width:56px;height:56px;border-radius:50%;
+  border:2px solid #60a5fa;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;
+  display:flex;align-items:center;justify-content:center;z-index:9998;cursor:pointer;
   box-shadow:0 5px 25px #2563eb88, 0 0 0 3px #0d1729;
   transition:transform .15s ease, box-shadow .2s ease;
   -webkit-tap-highlight-color:transparent;
@@ -591,29 +342,19 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
 #ncbAiChatBtn svg{width:26px;height:26px;display:block;pointer-events:none}
 
 #ncbAiChatBox{
-  position:fixed;
-  right:15px;
-  bottom:90px;
+  position:fixed;right:15px;bottom:90px;
   width:min(340px,calc(100vw - 30px));
   height:min(460px,calc(100vh - 130px));
-  background:#0d1729;
-  border:1px solid #334968;
-  border-radius:16px;
-  z-index:9997;
-  display:none;
-  flex-direction:column;
-  overflow:hidden;
-  box-shadow:0 15px 50px #000b;
-  animation:aiChatIn .25s ease;
+  background:#0d1729;border:1px solid #334968;border-radius:16px;
+  z-index:9997;display:none;flex-direction:column;overflow:hidden;
+  box-shadow:0 15px 50px #000b;animation:aiChatIn .25s ease;
 }
 #ncbAiChatBox.open{display:flex}
 @keyframes aiChatIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 .ncbAiChatHeader{
-  padding:12px 14px;
-  background:linear-gradient(120deg,#2563eb,#5935bd);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-shrink:0;
+  padding:12px 14px;background:linear-gradient(120deg,#2563eb,#5935bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
 .ncbAiChatHeader .ai-head-info{display:flex;align-items:center;gap:10px}
 .ncbAiChatHeader .ai-avatar{
@@ -624,87 +365,42 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
 .ncbAiChatHeader b{font-size:14px;color:#fff;display:block;line-height:1.2}
 .ncbAiChatHeader small{font-size:10px;color:#dbeafe;display:block}
 #ncbAiChatClose{
-  width:32px;height:32px;border-radius:8px;
-  background:rgba(255,255,255,0.15);color:#fff;
+  width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.15);color:#fff;
   font-weight:bold;font-size:15px;line-height:1;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s ease;
+  display:flex;align-items:center;justify-content:center;transition:background .15s ease;
 }
 #ncbAiChatClose:hover{background:rgba(239,68,68,0.5)}
 
-#ncbAiChatMessages{
-  flex:1;padding:12px;overflow-y:auto;
-  display:flex;flex-direction:column;gap:10px;
-}
+#ncbAiChatMessages{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 #ncbAiChatMessages::-webkit-scrollbar{width:6px}
 #ncbAiChatMessages::-webkit-scrollbar-thumb{background:#2563eb;border-radius:3px}
 
 .ncbAiMsg{
-  max-width:85%;
-  padding:9px 13px;
-  border-radius:12px;
-  font-size:13px;
-  line-height:1.5;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
-  animation:aiMsgIn .2s ease;
+  max-width:85%;padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5;
+  white-space:pre-line;overflow-wrap:anywhere;animation:aiMsgIn .2s ease;
 }
 @keyframes aiMsgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-
-.ncbAiMsg.bot{
-  align-self:flex-start;
-  background:#1b2b45;
-  color:#e2e8f0;
-  border-bottom-left-radius:4px;
-}
-.ncbAiMsg.user{
-  align-self:flex-end;
-  background:#2563eb;
-  color:#fff;
-  border-bottom-right-radius:4px;
-}
+.ncbAiMsg.bot{align-self:flex-start;background:#1b2b45;color:#e2e8f0;border-bottom-left-radius:4px}
+.ncbAiMsg.user{align-self:flex-end;background:#2563eb;color:#fff;border-bottom-right-radius:4px}
 .ncbAiTyping{
-  align-self:flex-start;
-  background:#1b2b45;
-  padding:10px 14px;
-  border-radius:12px 12px 12px 4px;
-  display:inline-flex;gap:4px;
+  align-self:flex-start;background:#1b2b45;padding:10px 14px;
+  border-radius:12px 12px 12px 4px;display:inline-flex;gap:4px;
 }
-.ncbAiTyping span{
-  width:6px;height:6px;border-radius:50%;background:#94a3b8;
-  animation:aiBlink 1.2s infinite;
-}
+.ncbAiTyping span{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:aiBlink 1.2s infinite}
 .ncbAiTyping span:nth-child(2){animation-delay:.2s}
 .ncbAiTyping span:nth-child(3){animation-delay:.4s}
 @keyframes aiBlink{0%,80%,100%{opacity:.3}40%{opacity:1}}
 
-.ncbAiChatInput{
-  display:flex;gap:6px;
-  padding:10px;
-  background:#111c30;
-  border-top:1px solid #1e2a42;
-  flex-shrink:0;
-}
+.ncbAiChatInput{display:flex;gap:6px;padding:10px;background:#111c30;border-top:1px solid #1e2a42;flex-shrink:0}
 .ncbAiChatInput input{
-  flex:1;min-width:0;
-  padding:10px 12px;
-  border-radius:8px;
-  border:1px solid #334968;
-  background:#0b1424;
-  color:#fff;
-  font-size:13px;
-  outline:none;
+  flex:1;min-width:0;padding:10px 12px;border-radius:8px;border:1px solid #334968;
+  background:#0b1424;color:#fff;font-size:13px;outline:none;
 }
 .ncbAiChatInput input:focus{border-color:#3b82f6}
 .ncbAiChatInput input:disabled{opacity:.6}
 .ncbAiChatInput button{
-  width:42px;
-  border-radius:8px;
-  background:#2563eb;
-  color:#fff;
-  font-size:16px;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s ease;
+  width:42px;border-radius:8px;background:#2563eb;color:#fff;font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:background .15s ease;
 }
 .ncbAiChatInput button:hover:not(:disabled){background:#3b82f6}
 .ncbAiChatInput button:disabled{opacity:.5;cursor:not-allowed;background:#475569}
@@ -715,21 +411,6 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
 </style>
 </head>
 <body>
-
-<div id="ncbGate">
-  <div class="gate-logo">
-    <img src="https://i.ibb.co/jPJvrJxJ/file-000000008ba48211bd900fefe8143556.png"
-         alt="NCB AI SUPPORT" draggable="false" oncontextmenu="return false;">
-  </div>
-  <h2>Xác minh truy cập</h2>
-  <p>Vui lòng hoàn thành xác minh bảo mật để vào trang NCB AI SUPPORT.</p>
-
-  <div id="ncbGateIdError"></div>
-
-  <div id="ncbGateTurnstile"></div>
-  <div id="ncbGateStatus">Đang tải…</div>
-  <div class="gate-site-id">Site ID: <span id="gateSiteIdText">…</span></div>
-</div>
 
 <div id="ncbMain">
 <div class="container">
@@ -790,11 +471,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
       <label>Mô tả chi tiết <span class="required-star">*</span></label>
       <textarea name="mo_ta" placeholder="Mô tả vấn đề bạn gặp phải..." required></textarea>
 
-      <label>Xác minh bảo mật <span class="required-star">*</span></label>
-      <div id="turnstile-container"></div>
-      <div class="turnstile-note">Nút GỬI chỉ bật sau khi xác minh thành công.</div>
-
-      <button class="sendButton" id="sendBtn" type="submit" disabled>GỬI BÁO CÁO</button>
+      <button class="sendButton" id="sendBtn" type="submit">GỬI BÁO CÁO</button>
     </form>
   </div>
 
@@ -811,7 +488,6 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   <div class="footer">
     NCB AI SUPPORT © 2026<br>
     Admin: Nguyễn Công Bằng — Hệ thống hỗ trợ người dùng NCB AI
-    <div class="site-id">Site ID: <span id="mainSiteIdText">…</span></div>
   </div>
 
 </div>
@@ -819,7 +495,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
 
 <div id="ncbNotifications"></div>
 
-<!-- ============ MODAL THÔNG BÁO CHÀO MỪNG ============ -->
+<!-- MODAL THÔNG BÁO CHÀO MỪNG -->
 <div id="ncbWelcomeModal">
   <div class="ncbWelcomeBox">
     <div class="ncbWelcomeHeader">
@@ -873,7 +549,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </div>
 </div>
 
-<!-- ============ MODAL LỊCH SỬ BÁO CÁO ============ -->
+<!-- MODAL LỊCH SỬ -->
 <div id="ncbHistoryModal">
   <div class="ncbHistoryBox">
     <div class="ncbHistoryHeader">
@@ -884,7 +560,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </div>
 </div>
 
-<!-- ============ MODAL CHI TIẾT BÁO CÁO ============ -->
+<!-- MODAL CHI TIẾT -->
 <div id="ncbDetailModal">
   <div class="ncbDetailBox">
     <div class="ncbDetailHeader">
@@ -895,7 +571,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </div>
 </div>
 
-<!-- ============ NÚT CÀI ĐẶT (VUÔNG, GÓC PHẢI TRÊN) ============ -->
+<!-- NÚT CÀI ĐẶT -->
 <button id="ncbSettingsBtn" title="Cài đặt">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/>
@@ -903,7 +579,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </svg>
 </button>
 
-<!-- ============ OVERLAY + PANEL CÀI ĐẶT (VUÔNG, GIỮA MÀN HÌNH) ============ -->
+<!-- PANEL CÀI ĐẶT -->
 <div id="ncbSettingsOverlay">
   <div id="ncbSettingsPanel">
     <div class="settingsHeader">
@@ -937,7 +613,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </div>
 </div>
 
-<!-- ============ NÚT CHAT AI HÌNH TRÒN ============ -->
+<!-- NÚT CHAT AI -->
 <button id="ncbAiChatBtn" title="Chat với AI hỗ trợ">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 8V4H8"/>
@@ -949,7 +625,7 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
   </svg>
 </button>
 
-<!-- ============ KHUNG CHAT AI ============ -->
+<!-- KHUNG CHAT AI -->
 <div id="ncbAiChatBox">
   <div class="ncbAiChatHeader">
     <div class="ai-head-info">
@@ -976,24 +652,11 @@ input[type="range"].ncbRange::-moz-range-track{height:6px;border-radius:6px;back
 <audio id="ncbBgMusic" src="https://files.catbox.moe/jv9cvp.mp3" preload="auto"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 
 <script>
 /* =========================================================
    CẤU HÌNH
    ========================================================= */
-const VERIFY_SITE_ID = "01a1f8e7-51f7-75f2-98a2-962124bf5dc5";
-
-const DISPLAY_SITE_IDS = [
-  "01a1f8e7-51f7-75f2-98a2-962124bf5dc5",
-  "01a1f8e7-46e6-77ef-9d93-379ac75014ca"
-];
-
-const IDLE_RESET_MS = 5 * 60 * 1000;
-const LAST_ACTIVITY_KEY = "ncb_last_activity";
-const DISPLAY_ID_KEY = "ncb_display_site_id";
-const WELCOME_SEEN_KEY = "ncb_welcome_seen";
-
 const EMAILJS_SERVICE_ID  = "service_yipfm4w";
 const EMAILJS_TEMPLATE_ID = "template_qnjojga";
 const EMAILJS_PUBLIC_KEY  = "xoair8XbZ9gKlPryH";
@@ -1002,14 +665,6 @@ const ADMIN_EMAIL         = "dovanphuoc124@gmail.com";
 const MAX_REPORTS_PER_DAY = 4;
 const QUOTA_KEY = "ncb_report_quota";
 const COOLDOWN_MS = 15000;
-
-const TURNSTILE_SITEKEY = "0x4AAAAAAGKIbsCOoqg2qN0G";
-const TURNSTILE_ACTION  = "report";
-const GATE_ACTION       = "page-gate";
-
-let reportWidgetId = null;
-let turnstileToken  = null;
-let gateWidgetId    = null;
 
 const MUSIC_VOLUME_KEY = "ncb_music_volume";
 const MUSIC_ENABLED_KEY = "ncb_music_enabled";
@@ -1021,123 +676,6 @@ const HISTORY_MAX = 50;
 if(window.emailjs){
   emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 }
-
-/* =========================================================
-   ID HIỂN THỊ
-   ========================================================= */
-function pickDisplaySiteId(){
-  try{
-    const saved = sessionStorage.getItem(DISPLAY_ID_KEY);
-    if(saved && DISPLAY_SITE_IDS.includes(saved)) return saved;
-  }catch(_){}
-  const idx = Math.floor(Math.random() * DISPLAY_SITE_IDS.length);
-  const picked = DISPLAY_SITE_IDS[idx];
-  try{ sessionStorage.setItem(DISPLAY_ID_KEY, picked); }catch(_){}
-  return picked;
-}
-
-let currentDisplaySiteId = pickDisplaySiteId();
-
-function renderDisplaySiteId(){
-  const a = document.getElementById("gateSiteIdText");
-  const b = document.getElementById("mainSiteIdText");
-  if(a) a.textContent = currentDisplaySiteId;
-  if(b) b.textContent = currentDisplaySiteId;
-}
-
-/* =========================================================
-   SITE_ID CHECK
-   ========================================================= */
-function getSiteIdFromUrl(){
-  try{
-    const url = new URL(window.location.href);
-    return url.searchParams.get("site_id") || "";
-  }catch(_){ return ""; }
-}
-
-function validateSiteIdOrBlock(){
-  const gotId = getSiteIdFromUrl();
-  const gateError = document.getElementById("ncbGateIdError");
-  const gateStatus = document.getElementById("ncbGateStatus");
-
-  if(!gotId){
-    if(gateError){
-      gateError.textContent = "Thiếu mã truy cập (site_id) trên URL.\nVui lòng mở website bằng đúng link được cấp.";
-      gateError.classList.add("show");
-    }
-    if(gateStatus){
-      gateStatus.textContent = "Không thể xác minh.";
-      gateStatus.classList.add("error");
-    }
-    return false;
-  }
-
-  if(gotId !== VERIFY_SITE_ID){
-    if(gateError){
-      gateError.textContent = "Mã truy cập (site_id) không đúng.\nVui lòng kiểm tra lại link bạn đã nhận được.";
-      gateError.classList.add("show");
-    }
-    if(gateStatus){
-      gateStatus.textContent = "Không thể xác minh.";
-      gateStatus.classList.add("error");
-    }
-    return false;
-  }
-
-  if(gateError){
-    gateError.classList.remove("show");
-    gateError.textContent = "";
-  }
-  return true;
-}
-
-function attachSiteIdToUrl(){
-  try{
-    const url = new URL(window.location.href);
-    if(url.searchParams.get("site_id") !== VERIFY_SITE_ID){
-      url.searchParams.set("site_id", VERIFY_SITE_ID);
-      history.replaceState({}, "", url.toString());
-    }
-  }catch(_){}
-}
-function attachSiteIdToAccessLink(){
-  const a = document.getElementById("accessLink");
-  if(!a) return;
-  try{
-    const url = new URL(a.href);
-    url.searchParams.set("site_id", VERIFY_SITE_ID);
-    a.href = url.toString();
-  }catch(_){}
-}
-
-/* =========================================================
-   IDLE
-   ========================================================= */
-function markActivity(){
-  try{ localStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now())); }catch(_){}
-}
-function lastActivityAge(){
-  try{
-    const raw = localStorage.getItem(LAST_ACTIVITY_KEY);
-    const t = parseInt(raw, 10);
-    if(!t || isNaN(t)) return Infinity;
-    return Date.now() - t;
-  }catch(_){ return Infinity; }
-}
-function shouldForceGate(){
-  if(lastActivityAge() === Infinity) return true;
-  return lastActivityAge() > IDLE_RESET_MS;
-}
-
-["click","touchstart","keydown","scroll","mousemove"].forEach(evt => {
-  window.addEventListener(evt, markActivity, { passive: true });
-});
-
-document.addEventListener("visibilitychange", () => {
-  if(document.visibilityState === "visible" && shouldForceGate()){
-    location.reload();
-  }
-});
 
 /* =========================================================
    MÃ ĐỊNH DANH
@@ -1220,96 +758,8 @@ function syncSendBtnState(){
     sendBtn.textContent = "ĐÃ HẾT LƯỢT HÔM NAY";
     return;
   }
-  if(!turnstileToken){
-    sendBtn.disabled = true;
-    sendBtn.textContent = "VUI LÒNG XÁC MINH BẢO MẬT";
-    return;
-  }
   sendBtn.disabled = false;
   sendBtn.textContent = "GỬI BÁO CÁO";
-}
-
-/* =========================================================
-   TURNSTILE
-   ========================================================= */
-function renderReportTurnstile(){
-  if(!window.turnstile) return;
-  if(reportWidgetId !== null) return;
-  const c = document.getElementById("turnstile-container");
-  if(!c) return;
-  reportWidgetId = turnstile.render(c, {
-    sitekey: TURNSTILE_SITEKEY,
-    action: TURNSTILE_ACTION,
-    callback: function(token){ turnstileToken = token; syncSendBtnState(); },
-    "error-callback": function(code){ console.warn("[Turnstile form] error:", code); turnstileToken = null; syncSendBtnState(); },
-    "expired-callback": function(){ turnstileToken = null; syncSendBtnState(); }
-  });
-}
-function resetReportTurnstile(){
-  turnstileToken = null;
-  if(window.turnstile && reportWidgetId !== null){
-    try { turnstile.reset(reportWidgetId); } catch(_){}
-  }
-  syncSendBtnState();
-}
-
-function unlockPage(){
-  const gate = document.getElementById("ncbGate");
-  const main = document.getElementById("ncbMain");
-  const settingsBtn = document.getElementById("ncbSettingsBtn");
-  const aiChatBtn = document.getElementById("ncbAiChatBtn");
-
-  gate.classList.add("hidden");
-  main.classList.add("unlocked");
-  if(settingsBtn) settingsBtn.style.display = "flex";
-  if(aiChatBtn) aiChatBtn.style.display = "flex";
-
-  markActivity();
-
-  attachSiteIdToUrl();
-  attachSiteIdToAccessLink();
-  updateQuotaBadge();
-  renderReportTurnstile();
-  tryInitMusicAfterUnlock();
-
-  openWelcomeModal();
-}
-function renderGateTurnstile(){
-  if(!window.turnstile){ return; }
-
-  if(!validateSiteIdOrBlock()){
-    return;
-  }
-
-  const c = document.getElementById("ncbGateTurnstile");
-  if(!c) return;
-  const status = document.getElementById("ncbGateStatus");
-  status.textContent = "Vui lòng xác minh bên dưới…";
-  status.classList.remove("error");
-
-  gateWidgetId = turnstile.render(c, {
-    sitekey: TURNSTILE_SITEKEY,
-    action: GATE_ACTION,
-    callback: function(token){
-      if(!validateSiteIdOrBlock()){
-        return;
-      }
-      status.textContent = "Xác minh thành công! Đang mở trang…";
-      setTimeout(unlockPage, 350);
-    },
-    "error-callback": function(code){
-      console.warn("[Turnstile gate] error:", code);
-      status.textContent = "Xác minh thất bại. Vui lòng thử lại.";
-      status.classList.add("error");
-      if(window.turnstile && gateWidgetId !== null){
-        try { turnstile.reset(gateWidgetId); } catch(_){}
-      }
-    },
-    "expired-callback": function(){
-      status.textContent = "Phiên xác minh hết hạn. Vui lòng xác minh lại.";
-      status.classList.add("error");
-    }
-  });
 }
 
 /* =========================================================
@@ -1376,11 +826,7 @@ if(music){
   });
 }
 
-let musicInitDone = false;
-function tryInitMusicAfterUnlock(){
-  if(musicInitDone) return;
-  musicInitDone = true;
-
+function tryInitMusic(){
   const prefs = loadMusicPrefs();
   if(musicToggle) musicToggle.checked = prefs.enabled;
   applyMusicVolume(prefs.vol);
@@ -1584,7 +1030,6 @@ function openWelcomeModal(){
 function closeWelcomeModal(){
   if(!welcomeModal) return;
   welcomeModal.classList.remove("open");
-  try{ localStorage.setItem(WELCOME_SEEN_KEY, "1"); }catch(_){}
 }
 
 if(welcomeClose){ welcomeClose.addEventListener("click", closeWelcomeModal); }
@@ -1636,12 +1081,6 @@ function isValidEmail(v){
 }
 
 emailField.addEventListener("input", () => emailField.classList.remove("invalid"));
-form.addEventListener("reset", () => {
-  setTimeout(() => {
-    emailField.classList.remove("invalid");
-    resetReportTurnstile();
-  }, 10);
-});
 
 form.addEventListener("submit", async function(e){
   e.preventDefault();
@@ -1659,12 +1098,6 @@ form.addEventListener("submit", async function(e){
   if(!data.tieu_de || !data.tieu_de.trim()){ form.querySelector('[name="tieu_de"]').classList.add("invalid"); hasError = true; errorMsg = "Vui lòng nhập tiêu đề lỗi."; }
   if(!data.mo_ta || !data.mo_ta.trim()){ form.querySelector('[name="mo_ta"]').classList.add("invalid"); hasError = true; errorMsg = "Vui lòng nhập mô tả chi tiết."; }
   if(hasError){ createNCBNotification("THIẾU THÔNG TIN", errorMsg, "error"); return; }
-
-  if(!turnstileToken){
-    createNCBNotification("CHƯA XÁC MINH","Vui lòng hoàn thành xác minh bảo mật trước khi gửi.","error");
-    syncSendBtnState();
-    return;
-  }
 
   if(getRemainingReports() <= 0){
     createNCBNotification("ĐÃ HẾT LƯỢT","Thiết bị này đã gửi đủ " + MAX_REPORTS_PER_DAY + " báo cáo hôm nay.\nVui lòng quay lại sau 00:00 (giờ Việt Nam).","error");
@@ -1696,13 +1129,10 @@ form.addEventListener("submit", async function(e){
     tieu_de: data.tieu_de.trim(),
     mo_ta: data.mo_ta.trim(),
     thoi_gian: thoiGian,
-    site_id: VERIFY_SITE_ID,
     created_at: now
   };
 
   const templateParams = {
-    website_id: VERIFY_SITE_ID,
-    display_site_id: currentDisplaySiteId,
     ten: historyItem.ten,
     email_lien_he: historyItem.email_lien_he,
     loai_yeu_cau: historyItem.loai_yeu_cau,
@@ -1716,12 +1146,9 @@ form.addEventListener("submit", async function(e){
     from_name: "NCB AI SUPPORT",
     to_name: "Admin Nguyễn Công Bằng",
     to_email: ADMIN_EMAIL,
-    turnstile_token: turnstileToken,
-    subject: "[NCB AI SUPPORT][" + VERIFY_SITE_ID + "] " + historyItem.loai_yeu_cau + " — " + reportID,
+    subject: "[NCB AI SUPPORT] " + historyItem.loai_yeu_cau + " — " + reportID,
     message:
-      "ID XÁC MINH: " + VERIFY_SITE_ID +
-      "\nID HIỂN THỊ: " + currentDisplaySiteId +
-      "\nMÃ ĐỊNH DANH: " + reportID +
+      "MÃ ĐỊNH DANH: " + reportID +
       "\nTiêu đề: " + historyItem.tieu_de +
       "\n\n" + historyItem.mo_ta +
       "\n\nEmail liên hệ: " + historyItem.email_lien_he
@@ -1767,14 +1194,13 @@ form.addEventListener("submit", async function(e){
   } finally {
     formSending = false;
     delete sendBtn.dataset.sending;
-    resetReportTurnstile();
     updateQuotaBadge();
     syncSendBtnState();
   }
 });
 
 /* =========================================================
-   CHAT AI — NÚT TRÒN + KHUNG CHAT
+   CHAT AI
    ========================================================= */
 const AI_API_KEY = "al-jH4_jPgB5e4p_UAEE46sAMikhSmSkl_A54AaFUnohFK";
 const AI_API_URL = "https://api.groq.com/openai/v1/chat/completions";
@@ -1885,7 +1311,7 @@ function aiFallback(q){
   if(q.includes("admin"))
     return "Admin của NCB AI là Nguyễn Công Bằng.";
   if(q.includes("báo lỗi") || q.includes("báo cáo"))
-    return "Hướng dẫn: chọn loại yêu cầu, nhập tên, email liên hệ (bắt buộc), phiên bản, tiêu đề, mô tả → xác minh → GỬI BÁO CÁO.\nMỗi thiết bị gửi tối đa 4 báo cáo/ngày.";
+    return "Hướng dẫn: chọn loại yêu cầu, nhập tên, email liên hệ (bắt buộc), phiên bản, tiêu đề, mô tả → GỬI BÁO CÁO.\nMỗi thiết bị gửi tối đa 4 báo cáo/ngày.";
   if(q.includes("cài đặt") || q.includes("setting"))
     return "Nút Cài đặt nằm ở góc phải trên màn hình (biểu tượng bánh răng). Trong đó có bật/tắt nhạc nền và âm lượng.";
   if(q.includes("giới hạn") || q.includes("lượt"))
@@ -1975,30 +1401,16 @@ if(aiChatText){
    KHỞI ĐỘNG
    ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
-  renderDisplaySiteId();
-
-  if(shouldForceGate()){
-    try{
-      localStorage.removeItem(LAST_ACTIVITY_KEY);
-      sessionStorage.removeItem(DISPLAY_ID_KEY);
-    }catch(_){}
-    currentDisplaySiteId = pickDisplaySiteId();
-    renderDisplaySiteId();
-  }
-
   updateQuotaBadge();
   syncSendBtnState();
-  attachSiteIdToAccessLink();
 
   const prefs = loadMusicPrefs();
   if(musicToggle) musicToggle.checked = prefs.enabled;
   applyMusicVolume(prefs.vol);
 
-  if(window.turnstile){
-    renderGateTurnstile();
-  } else {
-    window.onloadTurnstileCallback = renderGateTurnstile;
-  }
+  tryInitMusic();
+
+  openWelcomeModal();
 });
 
 document.addEventListener("contextmenu", function(e){
